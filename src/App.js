@@ -28,6 +28,8 @@ function App() {
             <Route path="catalog" element={<Catlog />} />
             <Route path="edit-item/:id" element={<EditItem />} />
             <Route path="item/:id" element={<ItemPage />} />
+            <Route path="item" element={<ItemPage />} />
+
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="profile" element={<Profile />} />
