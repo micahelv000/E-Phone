@@ -1,0 +1,1 @@
+//page where the admin can see anlaytics of the website
