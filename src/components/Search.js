@@ -22,7 +22,7 @@ export default function Search({ searchText, onSearchTextChange, onFilterChange,
         onPriceRangeChange(newValue);
     };
 
-    const [value, setValue] = React.useState([20, 37]);
+    const [value, setValue] = React.useState([0, 10000]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -36,7 +36,7 @@ export default function Search({ searchText, onSearchTextChange, onFilterChange,
                 <input
                     type="text"
                     className="form-control"
-                    placeholder="Search text..."
+                    placeholder="Search Item by name..."
                     value={searchText}
                     onChange={handleSearchInputChange}
                 />
@@ -55,6 +55,8 @@ export default function Search({ searchText, onSearchTextChange, onFilterChange,
                     getAriaLabel={() => 'Price range'}
                     value={value}
                     onChange={handleChange}
+                    min={0}
+                    max={10000}
                     valueLabelDisplay="auto"
                     getAriaValueText={valuetext}
                 />

@@ -1,6 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import Card from "./Item_Card.js";
+import { Divider } from '@mui/material';
+import Padding from '../components/Padding.js';
 
 
 export default function Grid({ items }) {
@@ -21,11 +23,17 @@ export default function Grid({ items }) {
     ];
 
     return (
-        <div className="row">
-            {fakeItems.map((item) => (
-                <Card key={item.id} item={item} />
-
-            ))}
+        <div className="container">
+            <div className="row">
+                {fakeItems.map((item) => (
+                    <div key={item.id} className=" col-lg-3">
+                        <Padding>
+                            <Card item={item} />
+                        </Padding>
+                    </div>
+                ))}
+            </div>
         </div>
     );
+
 }
