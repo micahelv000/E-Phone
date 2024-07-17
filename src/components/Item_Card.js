@@ -1,7 +1,9 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'; 
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Card } from 'react-bootstrap';
+import Button from '@mui/material/Button';
+import Divider from '@mui/joy/Divider';
+
 
 export default function Item_Card({ item }) {
     return (
@@ -12,8 +14,13 @@ export default function Item_Card({ item }) {
             <Card.Text>
                 {item.price}
             </Card.Text>
-            <Button variant="primary">View details</Button>
+            <Button size="small" color="primary">
+            View details
+            </Button>
           </Card.Body>
         </Card>
+
+        
+
     );
 }

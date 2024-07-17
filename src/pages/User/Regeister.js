@@ -5,9 +5,11 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import Header from '../../../src/components/Header';
+import { Container } from 'react-bootstrap';
 
 
 function Regeister() {
+
 
   const [validated, setValidated] = useState(false);
 
@@ -22,8 +24,10 @@ function Regeister() {
   };
 
   return (
-    <div>
+    <>
     <Header />
+
+    <Container>
     <h1>Register page</h1>
  
     <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -97,7 +101,8 @@ function Regeister() {
       </Form.Group>
       <Button type="submit">Submit form</Button>
     </Form>
-    </div>
+    </Container>
+    </>
   );
 }
 

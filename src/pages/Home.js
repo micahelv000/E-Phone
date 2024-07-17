@@ -4,6 +4,9 @@ import Search from "../components/Search";
 import Grid from "../components/Grid";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Gallery from '../components/Gallery';
+import { Container } from 'react-bootstrap';
+import Bottom from '../components/Bottom';
+
 
 export default function Home() {
     const [searchText, setSearchText] = useState('');
@@ -34,10 +37,17 @@ export default function Home() {
                 priceRange={priceRange}
                 onPriceRangeChange={handlePriceRangeChange}
             />
+
             <br></br>
+           
+
          {/* here we need to do something smart to get all the data from the search
                 and pass it to the Grid as json or something */} 
-            <Grid  />
+            <Container>
+                <Grid  />
+            </Container>
+
+            <Bottom /> 
         </div>
     )
 }

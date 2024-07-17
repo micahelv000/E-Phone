@@ -1,1 +1,13 @@
-//page where the admin can see anlaytics of the website
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import Header from '../../components/Header';
+
+export default function Analytics(options) {
+    return (
+        <>
+
+            <Header/>
+            
+       </>
+    );
+}

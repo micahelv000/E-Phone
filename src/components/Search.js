@@ -1,8 +1,15 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Slider from '@mui/material/Slider';
+import Grid from '@mui/material/Grid';
+
+import Container from '@mui/material/Container';
+
+function valuetext(value) {
+    return `${value}°C`;
+  }
 
 export default function Search({ searchText, onSearchTextChange, onFilterChange, priceRange, onPriceRangeChange }) {
-    
     const handleSearchInputChange = (event) => {
         onSearchTextChange(event.target.value);
     };
@@ -11,40 +18,48 @@ export default function Search({ searchText, onSearchTextChange, onFilterChange,
         onFilterChange(filter);
     };
 
-    const handlePriceRangeChange = (event) => {
-        onPriceRangeChange(event.target.value);
-    };    
-    
+    const handlePriceRangeChange = (event, newValue) => {
+        onPriceRangeChange(newValue);
+    };
+
+    const [value, setValue] = React.useState([20, 37]);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+        handlePriceRangeChange(event, newValue);
+    };
+
     return (
-        <div className="container-fluid mt-4 px-5">
-            <div className="row align-items-center">
-                <div className="col-7">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Search text..."
-                        value={searchText}
-                        onChange={handleSearchInputChange}
-                    />
-                </div>
-                <div className="col-5 d-flex align-items-center justify-content-end">
-                    <button className="btn btn-outline-primary mx-1" onClick={() => handleFilterClick('Filter 1')}>Filter 1</button>
-                    <button className="btn btn-outline-primary mx-1" onClick={() => handleFilterClick('Filter 2')}>Filter 2</button>
-                    <button className="btn btn-outline-primary mx-1" onClick={() => handleFilterClick('Filter 3')}>Filter 3</button>
-                    <div className="d-flex align-items-center ml-3">
-                        <p className="mb-0">0 NIS</p>
-                        <input
-                            type="range"
-                            className="form-range mx-3"
-                            min="0"
-                            max="100"
-                            value={priceRange}
-                            onChange={handlePriceRangeChange}
-                        />
-                        <p className="mb-0">6000 NIS</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Container style={{ maxWidth: '80%' }}>
+        <Grid container spacing={1}>
+            <Grid item xs={6}>
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search text..."
+                    value={searchText}
+                    onChange={handleSearchInputChange}
+                />
+            </Grid>
+            <Grid item xs="auto">
+                <button className="btn btn-outline-primary mx-1" onClick={() => handleFilterClick('Filter 1')}>Filter 1</button>
+            </Grid>
+            <Grid item xs="auto">
+                <button className="btn btn-outline-primary mx-1" onClick={() => handleFilterClick('Filter 2')}>Filter 2</button>
+            </Grid>
+            <Grid item xs="auto">
+                <button className="btn btn-outline-primary mx-1" onClick={() => handleFilterClick('Filter 3')}>Filter 3</button>
+            </Grid>
+            <Grid item xs={3}>
+                <Slider
+                    getAriaLabel={() => 'Price range'}
+                    value={value}
+                    onChange={handleChange}
+                    valueLabelDisplay="auto"
+                    getAriaValueText={valuetext}
+                />
+            </Grid>
+        </Grid>
+        </Container>
     );
 }

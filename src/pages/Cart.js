@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import CartCard from '../components/CartCard';
+import { Container } from 'react-bootstrap';
 
 
 export default function Cart() {
@@ -23,6 +24,7 @@ export default function Cart() {
   return (
     <div>
       <Header />
+      <Container maxWidth="sm">
       <div className="shopping-cart">
         {items.map(item => (
           <CartCard
@@ -33,6 +35,7 @@ export default function Cart() {
           />
         ))}
       </div>
+      </Container>
     </div>
   );
 }

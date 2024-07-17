@@ -5,8 +5,13 @@ export default function Gallery(options) {
     return (
         <>
         <center>
-        <h2 >imagine a wide photo that look nice with a text</h2>
+        <img src="https://media.ksp.co.il/otk19z8kk62fr85y4fts5.png"></img>
+        {/* <img src="https://media.ksp.co.il/otk19z8kk62fr85y4fts5.png"></img>
+        <img src="https://media.ksp.co.il/otk19z8kk62fr85y4fts5.png"></img>
+        <img src="https://media.ksp.co.il/otk19z8kk62fr85y4fts5.png"></img>*/}
         </center>
+        <br></br>
+
         </>
 
     );

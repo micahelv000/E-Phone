@@ -2,6 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import Card from "./Item_Card.js";
 
+
 export default function Grid({ items }) {
     // Sample fake items (replace with your actual data)
     const fakeItems = [
@@ -23,6 +24,7 @@ export default function Grid({ items }) {
         <div className="row">
             {fakeItems.map((item) => (
                 <Card key={item.id} item={item} />
+
             ))}
         </div>
     );
