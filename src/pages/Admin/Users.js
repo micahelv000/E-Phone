@@ -5,6 +5,7 @@ import Header from '../../components/Header.js';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import { Container } from 'react-bootstrap';
+import { FitScreen } from '@mui/icons-material';
 
 //TEMP TABLE
 const columns = [
@@ -48,6 +49,26 @@ const columns = [
     { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
     { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
     { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+    { id: 10, lastName: 'Snow', firstName: 'Jon', age: 14 },
+    { id: 11, lastName: 'Snow', firstName: 'Jon', age: 14 },
+    { id: 12, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
+    { id: 13, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
+    { id: 14, lastName: 'Stark', firstName: 'Arya', age: 11 },
+    { id: 15, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+    { id: 16, lastName: 'Melisandre', firstName: null, age: 150 },
+    { id: 17, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+    { id: 18, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+    { id: 19, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+    { id: 20, lastName: 'Snow', firstName: 'Jon', age: 14 },
+    { id: 21, lastName: 'Snow', firstName: 'Jon', age: 14 },
+    { id: 22, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
+    { id: 23, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
+    { id: 24, lastName: 'Stark', firstName: 'Arya', age: 11 },
+    { id: 25, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+    { id: 26, lastName: 'Melisandre', firstName: null, age: 150 },
+    { id: 27, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+    { id: 28, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+    { id: 29, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
   ];
   ////////////////////////////////
 
@@ -56,18 +77,19 @@ export default function Users(options) {
         <div>
             <Header/>
             <Container>
-            <Box sx={{ height: 400, width: '100%' }}>
+              <h1>Admin page for edit users details</h1>
+            <Box sx={{ height: '80vh', width: '100%' }}>
                 <DataGrid
                     rows={rows}
                     columns={columns}
                     initialState={{
                     pagination: {
                         paginationModel: {
-                        pageSize: 5,
+                        pageSize: 20,
                         },
                     },
                     }}
-                    pageSizeOptions={[5]}
+                    pageSizeOptions={[20]}
                     checkboxSelection
                     disableRowSelectionOnClick
                 />

@@ -59,7 +59,14 @@ export default function Search({ searchText, onSearchTextChange, onFilterChange,
                     max={10000}
                     valueLabelDisplay="auto"
                     getAriaValueText={valuetext}
+                    
                 />
+                {/*
+                    we need 3 parmetsers for filtering
+                    1.IOS|ANDROID
+                    2.ScreenSIze
+                    3.Year                    
+                */}
             </Grid>
         </Grid>
         </Container>

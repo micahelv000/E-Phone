@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import CartCard from '../components/CartCard';
 import { Container } from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 
 
 export default function Cart() {
@@ -35,6 +36,8 @@ export default function Cart() {
           />
         ))}
       </div>
+      <br></br>
+      <Button>Chekout</Button>
       </Container>
     </div>
   );
