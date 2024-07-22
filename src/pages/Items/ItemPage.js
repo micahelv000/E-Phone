@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
-import { Container } from 'react-bootstrap';
+import { Button, Container } from 'react-bootstrap';
 
 
 var value = 2;
@@ -34,7 +34,7 @@ export default function ItemPage(item) {
 
         </ListGroup>
         <Card.Body>
-          <button href="#">add to cart </button>
+          <Button href="#">add to cart </Button>
         </Card.Body>
       </Card>
     </Container>
