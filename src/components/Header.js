@@ -20,12 +20,20 @@ export default function Header(options) {
         }
     };
 
+    const navigateHome = () => {
+        navigate('/');
+    };
+
+    const navigateCart = () => {
+        navigate('/cart');
+    }
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
-                <div className="navbar-brand me-7"><FaCartShopping size={32}/></div>
-                <div className="navbar-brand mx-auto"><img src={EphoneImage} alt='Ephone' height='60px'/></div>
-                <div className="navbar-brand ms-7" onClick={handleUserIconClick}><LuUser2  size={32}/></div>
+                <div className="navbar-brand me-7" onClick={navigateCart} style={{cursor: 'pointer'}}><FaCartShopping size={32}/></div>
+                <div className="navbar-brand mx-auto" onClick={navigateHome} ><img src={EphoneImage} alt='Ephone' height='60px' style={{cursor: 'pointer'}}/></div>
+                <div className="navbar-brand ms-7" onClick={handleUserIconClick} style={{cursor: 'pointer'}}><LuUser2  size={32}/></div>
             </div>
         </nav>
     );

@@ -1,3 +1,28 @@
-.red{
-    background-color: red !important;
+/* ProfileCard.css */
+.profile-card-container {
+    background-color: #f9f9f9 !important;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.profile-card-container .media-body h5,
+.profile-card-container .media-body p,
+.profile-card-container .media-body ul {
+    font-family: 'Arial', sans-serif;
+}
+
+.profile-card-container .media-body ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.profile-card-container .media-body ul li {
+    margin-bottom: 10px;
+}
+
+.profile-card-container img {
+    border-radius: 100%;
+    object-fit: cover;
 }

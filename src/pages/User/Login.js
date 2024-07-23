@@ -4,6 +4,7 @@ import Header from '../../../src/components/Header';
 import { Container } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Login() {
   const navigate = useNavigate();
@@ -33,23 +34,27 @@ function Login() {
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formBasicUsername">
             <Form.Label>Username</Form.Label>
-            <Form.Control type="text" placeholder="Enter your username" />
+            <Form.Control type="text" placeholder="Enter your username"/>
           </Form.Group>
-          <br />
+          <br/>
 
           <Form.Group controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Enter your password" />
+            <Form.Control type="password" placeholder="Enter your password"/>
             <Form.Text className="text-muted">
             </Form.Text>
           </Form.Group>
 
           <Form.Group controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Remember me" />
+            <Form.Check type="checkbox" label="Remember me"/>
           </Form.Group>
 
+          <div className="mt-3">
+            <Link to="/register">Don't have an account? Register here</Link>
+          </div>
+
           <Form.Group controlId="formBasicSubmit">
-            <Form.Control type="submit" value="Login" className="btn btn-primary" />
+            <Form.Control type="submit" value="Login" className="btn btn-primary"/>
           </Form.Group>
         </Form>
       </Container>

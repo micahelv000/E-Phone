@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
@@ -8,7 +9,8 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const port = 5000;
 
-const dbURI = '***REMOVED***';
+const dbURI = process.env.DB_URI;
+const jwtSecret = process.env.JWT_SECRET;
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => console.log('Connected to db'))
@@ -42,7 +44,7 @@ app.post('/register', async (req, res) => {
     });
     user.save()
         .then(user => {
-            const token = jwt.sign({ userId: user._id }, 'some-key');
+            const token = jwt.sign({ userId: user._id }, jwtSecret);
             res.status(201).send({ token });
         })
         .catch(err => res.status(400).send(err));
@@ -58,7 +60,7 @@ app.post('/login', async (req, res) => {
       bcrypt.compare(password, user.password)
         .then(isMatch => {
           if (isMatch) {
-              const token = jwt.sign({ userId: user._id }, 'some-key');
+              const token = jwt.sign({ userId: user._id }, jwtSecret);
               res.status(200).send({ message: 'Login successful', token });
           } else {
             res.status(400).send('Password is incorrect');
@@ -66,6 +68,20 @@ app.post('/login', async (req, res) => {
         });
     })
     .catch(err => res.status(500).send(err));
+});
+
+app.get('/user-details', async (req, res) => {
+    const token = req.headers.authorization.split(' ')[1]; // Assuming token is sent as "Bearer <token>"
+    try {
+        const decoded = jwt.verify(token, jwtSecret);
+        const user = await User.findById(decoded.userId).select('-password -__v -_id');
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.status(200).send(user);
+    } catch (error) {
+        res.status(500).send('Invalid token');
+    }
 });
 
 app.listen(port, () => {
