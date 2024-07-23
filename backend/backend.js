@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path')
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
@@ -12,8 +13,8 @@ const port = 5000;
 const dbURI = process.env.DB_URI;
 const jwtSecret = process.env.JWT_SECRET;
 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then((result) => console.log('Connected to db'))
+mongoose.connect(dbURI)
+  .then(() => console.log('Connected to db'))
   .catch((err) => console.log(err));
 
 app.use(express.json());
@@ -52,7 +53,7 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  User.findOne({ username })
+  User.findOne({ username }, null, null)
     .then(user => {
       if (!user) {
         return res.status(400).send('User not found');
@@ -74,7 +75,7 @@ app.get('/user-details', async (req, res) => {
     const token = req.headers.authorization.split(' ')[1]; // Assuming token is sent as "Bearer <token>"
     try {
         const decoded = jwt.verify(token, jwtSecret);
-        const user = await User.findById(decoded.userId).select('-password -__v -_id');
+        const user = await User.findById(decoded.userId, null, null).select('-password -__v -_id');
         if (!user) {
             return res.status(404).send('User not found');
         }
