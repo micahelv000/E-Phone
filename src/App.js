@@ -46,8 +46,7 @@ function AppRoutes() {
       <Route path="admin/users" element={<AdminUsers />} />
       <Route path="cart" element={<Cart />} />
       <Route path="edit-item/" element={<EditItem />} />
-      <Route path="item/" element={<ItemPage />} />
-      <Route path="item" element={<ItemPage />} />
+      <Route path="/Item" element={<ItemPage />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
       <Route path="profile" element={<Profile />} />
