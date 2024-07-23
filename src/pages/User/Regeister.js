@@ -6,18 +6,40 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import Header from '../../../src/components/Header';
 import { Container } from 'react-bootstrap';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 function Regeister() {
-
-
+  const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     const form = event.currentTarget;
+    event.preventDefault();
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
+    } else {
+      // Prepare data from form fields
+      const userData = {
+        username: form.validationCustomUsername.value,
+        password: form.validationCustom04.value,
+        firstName: form.validationCustom01.value,
+        lastName: form.validationCustom02.value,
+        city: form.validationCustom03.value,
+        phoneNumber: form.validationCustom05.value,
+      };
+
+      try {
+        const response = await axios.post('http://localhost:5000/register', userData);
+        console.log(response.data);
+        localStorage.setItem('authToken', response.data.token);
+        navigate('/');
+        // Redirect or show success message
+      } catch (error) {
+        console.error(error);
+        // Handle error
+      }
     }
 
     setValidated(true);
