@@ -38,7 +38,6 @@ function Regeister() {
             required
             type="text"
             placeholder="First name"
-            defaultValue="Mark"
           />
           <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         </Form.Group>
@@ -48,7 +47,6 @@ function Regeister() {
             required
             type="text"
             placeholder="Last name"
-            defaultValue="Otto"
           />
           <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         </Form.Group>
@@ -76,18 +74,20 @@ function Regeister() {
             Please provide a valid city.
           </Form.Control.Feedback>
         </Form.Group>
+
         <Form.Group as={Col} md="3" controlId="validationCustom04">
-          <Form.Label>State</Form.Label>
-          <Form.Control type="text" placeholder="State" required />
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="Password" placeholder="Password" required />
           <Form.Control.Feedback type="invalid">
-            Please provide a valid state.
+            Please provide a valid Password.
           </Form.Control.Feedback>
         </Form.Group>
+
         <Form.Group as={Col} md="3" controlId="validationCustom05">
-          <Form.Label>Zip</Form.Label>
-          <Form.Control type="text" placeholder="Zip" required />
+          <Form.Label>Phone Number</Form.Label>
+          <Form.Control type="text" placeholder="Phone Number" required />
           <Form.Control.Feedback type="invalid">
-            Please provide a valid zip.
+            Please provide a Phone Number.
           </Form.Control.Feedback>
         </Form.Group>
       </Row>

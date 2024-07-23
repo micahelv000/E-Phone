@@ -45,8 +45,8 @@ function AppRoutes() {
       <Route path="admin/analytics" element={<AdminAnalytics />} />
       <Route path="admin/users" element={<AdminUsers />} />
       <Route path="cart" element={<Cart />} />
-      <Route path="edit-item/:id" element={<EditItem />} />
-      <Route path="item/:id" element={<ItemPage />} />
+      <Route path="edit-item/" element={<EditItem />} />
+      <Route path="item/" element={<ItemPage />} />
       <Route path="item" element={<ItemPage />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
