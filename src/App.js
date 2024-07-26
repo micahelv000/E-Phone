@@ -10,7 +10,7 @@ import Cart from './pages/Cart';
 import EditItem from './pages/Items/EditItem';
 import ItemPage from './pages/Items/ItemPage';
 import Login from './pages/User/Login';
-import Register from './pages/User/Regeister';
+import Register from './pages/User/Register';
 import Profile from './pages/User/Profile';
 import ReactGA from 'react-ga';
 

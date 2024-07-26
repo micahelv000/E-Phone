@@ -10,7 +10,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
-function Regeister() {
+function Register() {
   const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
 
@@ -22,12 +22,12 @@ function Regeister() {
     } else {
       // Prepare data from form fields
       const userData = {
-        username: form.validationCustomUsername.value,
-        password: form.validationCustom04.value,
-        firstName: form.validationCustom01.value,
-        lastName: form.validationCustom02.value,
-        city: form.validationCustom03.value,
-        phoneNumber: form.validationCustom05.value,
+        username: document.getElementById('validationCustomUsername').value.toLowerCase(),
+        password: document.getElementById('validationCustom04').value,
+        firstName: document.getElementById('validationCustom01').value,
+        lastName: document.getElementById('validationCustom02').value,
+        city: document.getElementById('validationCustom03').value,
+        phoneNumber: document.getElementById('validationCustom05').value,
       };
 
       try {
@@ -128,4 +128,4 @@ function Regeister() {
   );
 }
 
-export default Regeister;
+export default Register;
