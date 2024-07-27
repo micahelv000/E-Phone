@@ -13,6 +13,7 @@ import Login from './pages/User/Login';
 import Register from './pages/User/Register';
 import Profile from './pages/User/Profile';
 import ReactGA from 'react-ga';
+import EditUser from './pages/User/EditUser';
 
 const TRACKING_ID = "cFpLxL70R2Wk-juZYkRzDw"; // Replace with your tracking ID
 ReactGA.initialize(TRACKING_ID);
@@ -48,6 +49,8 @@ function AppRoutes() {
       <Route path="edit-item/" element={<EditItem />} />
       <Route path="/Item" element={<ItemPage />} />
       <Route path="login" element={<Login />} />
+      <Route path="EditUser" element={<EditUser />} />
+
       <Route path="register" element={<Register />} />
       <Route path="profile" element={<Profile />} />
       <Route path="*" element={<NoPage />} />
