@@ -38,7 +38,7 @@ const brands = [
 ];
 
 function valuetext(value) {
-  return `${value}°C`;
+  return `${value}$`;
 }
 
 export default function Search({ searchText, onSearchTextChange, onFilterChange, priceRange, onPriceRangeChange }) {
@@ -191,6 +191,7 @@ export default function Search({ searchText, onSearchTextChange, onFilterChange,
             min={0}
             max={2500}
             valueLabelDisplay="auto"
+            disableSwap
             getAriaValueText={valuetext}
           />
         </Grid>

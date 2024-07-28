@@ -54,7 +54,7 @@ export default function ItemCard({ item }) {
                 <Card.Text>
                     {item.price > 0 ? `Price: ${item.price} $` : 'Out of stock'}
                 </Card.Text>
-                {item.price > 0 ? 
+                {item.stock > 0 ? 
                     <Button size="small" color="primary" component={Link} to={`/Item?slug=${item.slug}`}>
                         View details
                     </Button>

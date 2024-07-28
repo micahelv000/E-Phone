@@ -6,7 +6,7 @@ const Grid = ({ items }) => {
     return (
         <Row>
             {items.map((item) => (
-                <Col key={item.slug} xs={12} sm={6} md={4} lg={3}>
+                <Col key={item.slug} xs={8} sm={6} md={4} lg={3}>
                     <ItemCard item={item} />
                 </Col>
             ))}
