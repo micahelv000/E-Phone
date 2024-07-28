@@ -50,7 +50,7 @@ function Register() {
     <Header />
 
     <Container>
-    <h1>Register page</h1>
+    <center><h1>Register page</h1></center>
  
     <Form noValidate validated={validated} onSubmit={handleSubmit}>
       <Row className="mb-3">
@@ -121,7 +121,7 @@ function Register() {
           feedbackType="invalid"
         />
       </Form.Group>
-      <Button type="submit">Submit form</Button>
+      <center><Button type="submit">Submit form</Button></center>
     </Form>
     </Container>
     </>

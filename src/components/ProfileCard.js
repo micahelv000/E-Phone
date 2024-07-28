@@ -12,7 +12,6 @@ export default function ProfileCard({ userData }) {
             <div className="col">
                 <div className="media-body">
                     <h5 className="mt-0">@{userData.username}</h5>
-                    <p>I'm a new user</p>
                     <ul>
                         <li>Full Name: {userData.firstName} {userData.lastName}</li>
                         <li>City: {userData.city}</li>

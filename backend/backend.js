@@ -8,9 +8,6 @@ const jwt = require('jsonwebtoken');
 const Item = require('./models/Item');
 const User = require('./models/User');
 
-/** @typedef {import('./models/User').User} User */
-
-
 const app = express();
 const port = 5000;
 
@@ -36,6 +33,7 @@ app.post('/register', async (req, res) => {
     city,
     phoneNumber
   });
+
   user.save()
     .then(user => {
       const token = jwt.sign({ userId: user._id }, jwtSecret);
@@ -45,47 +43,92 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
-    /** @type {Promise<User>} */
-    const findUser = User.findOne({ username }, null, null).exec();
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).send('User not found');
+    }
 
-    findUser
-        .then(user => {
-            if (!user) {
-                return res.status(400).send('User not found');
-            }
-            bcrypt.compare(password, user.password)
-                .then(isMatch => {
-                    if (isMatch) {
-                        const token = jwt.sign({ userId: user._id }, jwtSecret);
-                        res.status(200).send({ message: 'Login successful', token });
-                    } else {
-                        res.status(400).send('Password is incorrect');
-                    }
-                });
-        })
-        .catch(err => res.status(500).send(err));
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (isMatch) {
+      const token = jwt.sign({ userId: user._id }, jwtSecret);
+      res.status(200).send({ message: 'Login successful', token });
+    } else {
+      res.status(400).send('Password is incorrect');
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
-app.get('/user-details', async (req, res) => {
-  const token = req.headers.authorization.split(' ')[1]; // Assuming token is sent as "Bearer <token>"
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).send('Access denied');
+  }
+
+  jwt.verify(token, jwtSecret, (err, user) => {
+    if (err) {
+      return res.status(403).send('Invalid token');
+    }
+    req.user = user;
+    next();
+  });
+};
+
+app.get('/user-details', authenticateToken, async (req, res) => {
   try {
-    const decoded = jwt.verify(token, jwtSecret);
-    const user = await User.findById(decoded.userId, null, null).select('-password -__v -_id');
+    const user = await User.findById(req.user.userId).select('-password -__v');
     if (!user) {
       return res.status(404).send('User not found');
     }
     res.status(200).send(user);
   } catch (error) {
-    res.status(500).send('Invalid token');
+    res.status(500).send('Error fetching user details');
+  }
+});
+
+app.put('/update-user', authenticateToken, async (req, res) => {
+  const { username, firstName, lastName, city, phoneNumber } = req.body;
+  const updateData = { username, firstName, lastName, city, phoneNumber };
+
+  try {
+    const options = { new: true };
+    const user = await User.findByIdAndUpdate(req.user.userId, updateData, options);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).send('Error updating user details');
+  }
+});
+
+
+app.put('/update-password', authenticateToken, async (req, res) => {
+  const { password } = req.body;
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const options = { new: true };
+    const user = await User.findByIdAndUpdate(req.user.userId, { password: hashedPassword }, options);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    res.status(200).send('Password updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating password');
   }
 });
 
 app.get('/item-details/:slug', async (req, res) => {
   const { slug } = req.params;
   try {
-    const item = await Item.findOne({ slug }, null, null);
+    const item = await Item.findOne({ slug });
     if (!item) {
       return res.status(200).send({ stock: 0, price: 0 });
     }
@@ -110,6 +153,27 @@ app.put('/update-item/:slug', async (req, res) => {
     res.status(500).send('Error updating item details');
   }
 });
+
+app.get('/items', async (req, res) => {
+  try {
+    const items = await Item.find();
+    res.status(200).send(items);
+  } catch (error) {
+    res.status(500).send('Error fetching items');
+  }
+});
+
+
+app.get('/users', authenticateToken, async (req, res) => {
+  try {
+    const users = await User.find().select('-password -__v');
+    res.status(200).send(users);
+  } catch (error) {
+    res.status(500).send('Error fetching users');
+  }
+});
+
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

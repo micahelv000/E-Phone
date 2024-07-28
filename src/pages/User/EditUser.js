@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -9,10 +9,53 @@ import { Container } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-
-function Edituser() {
+function EditUser() {
   const navigate = useNavigate();
-  const [validated, setValidated] = useState(false);
+  const [userDetailsValidated, setUserDetailsValidated] = useState(false);
+  const [passwordValidated, setPasswordValidated] = useState(false);
+  const [userDetails, setUserDetails] = useState({
+    username: '',
+    firstName: '',
+    lastName: '',
+    city: '',
+    phoneNumber: ''
+  });
+  const [password, setPassword] = useState('');
+
+  // Check if user is logged in before allowing access to the page
+  const isLoggedIn = () => {
+    return Boolean(localStorage.getItem('authToken'));
+  };
+
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      navigate('/NoPage');
+    } else {
+      // Fetch user details from the server
+      const fetchUserDetails = async () => {
+        try {
+          const response = await axios.get('http://localhost:5000/user-details', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+          });
+          console.log('Fetched user details:', response.data);
+
+          setUserDetails({
+            username: response.data.username,
+            firstName: response.data.firstName,
+            lastName: response.data.lastName,
+            city: response.data.city,
+            phoneNumber: response.data.phoneNumber
+          });
+        } catch (error) {
+          console.error(error);
+          // Handle error, e.g., navigate to login page if the token is invalid
+        }
+      };
+      fetchUserDetails();
+    }
+  }, [navigate]);
 
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
@@ -20,112 +63,177 @@ function Edituser() {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {
-      // Prepare data from form fields
       const userData = {
-        username: document.getElementById('validationCustomUsername').value.toLowerCase(),
-        password: document.getElementById('validationCustom04').value,
-        firstName: document.getElementById('validationCustom01').value,
-        lastName: document.getElementById('validationCustom02').value,
-        city: document.getElementById('validationCustom03').value,
-        phoneNumber: document.getElementById('validationCustom05').value,
+        username: userDetails.username.toLowerCase(),
+        firstName: userDetails.firstName,
+        lastName: userDetails.lastName,
+        city: userDetails.city,
+        phoneNumber: userDetails.phoneNumber
       };
 
       try {
-        const response = await axios.post('http://localhost:5000/register', userData);
+        const response = await axios.put('http://localhost:5000/update-user', userData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+          }
+        });
         console.log(response.data);
-        localStorage.setItem('authToken', response.data.token);
-        navigate('/');
-        // Redirect or show success message
+        navigate('/home');
       } catch (error) {
         console.error(error);
         // Handle error
       }
     }
+    setUserDetailsValidated(true);
+  };
 
-    setValidated(true);
+  const handleSubmitPassword = async (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+    } else {
+      const userData = {
+        password: password
+      };
+
+      try {
+        const response = await axios.put('http://localhost:5000/update-password', userData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+          }
+        });
+        console.log(response.data);
+        navigate('/home');
+      } catch (error) {
+        console.error(error);
+        // Handle error
+      }
+    }
+    setPasswordValidated(true);
+  };
+
+  const handleInputChange = (event) => {
+    const { id, value } = event.target;
+    setUserDetails((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
   };
 
   return (
     <>
-    <Header />
+      <Header />
 
-    <Container>
-    <h1>Edit details page</h1>
- 
-    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-      <Row className="mb-3">
-        <Form.Group as={Col} md="4" controlId="validationCustom01">
-          <Form.Label>First name</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="First name"
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group as={Col} md="4" controlId="validationCustom02">
-          <Form.Label>Last name</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Last name"
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group as={Col} md="4" controlId="validationCustomUsername">
-          <Form.Label>Username</Form.Label>
-          <InputGroup hasValidation>
-            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-            <Form.Control
-              type="text"
-              placeholder="Username"
-              aria-describedby="inputGroupPrepend"
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              Please choose a username.
-            </Form.Control.Feedback>
-          </InputGroup>
-        </Form.Group>
-      </Row>
-      <Row className="mb-3">
-        <Form.Group as={Col} md="6" controlId="validationCustom03">
-          <Form.Label>City</Form.Label>
-          <Form.Control type="text" placeholder="City" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid city.
-          </Form.Control.Feedback>
-        </Form.Group>
+      <Container>
+        <center><h1>Edit Details Page</h1></center>
 
-        <Form.Group as={Col} md="3" controlId="validationCustom04">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="Password" placeholder="Password" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid Password.
-          </Form.Control.Feedback>
-        </Form.Group>
+        <Form noValidate validated={userDetailsValidated} onSubmit={handleSubmit}>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="4" controlId="firstName">
+              <Form.Label>First name</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                placeholder="First name"
+                value={userDetails.firstName}
+                onChange={handleInputChange}
+              />
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} md="4" controlId="lastName">
+              <Form.Label>Last name</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                placeholder="Last name"
+                value={userDetails.lastName}
+                onChange={handleInputChange}
+              />
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} md="4" controlId="username">
+              <Form.Label>Username</Form.Label>
+              <InputGroup hasValidation>
+                <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+                <Form.Control
+                  type="text"
+                  placeholder="Username"
+                  aria-describedby="inputGroupPrepend"
+                  required
+                  value={userDetails.username}
+                  onChange={handleInputChange}
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please choose a username.
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="6" controlId="city">
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="City"
+                required
+                value={userDetails.city}
+                onChange={handleInputChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                Please provide a valid city.
+              </Form.Control.Feedback>
+            </Form.Group>
 
-        <Form.Group as={Col} md="3" controlId="validationCustom05">
-          <Form.Label>Phone Number</Form.Label>
-          <Form.Control type="text" placeholder="Phone Number" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a Phone Number.
-          </Form.Control.Feedback>
-        </Form.Group>
-      </Row>
-      <Form.Group className="mb-3">
-        <Form.Check
-          required
-          label="Agree to terms and conditions"
-          feedback="You must agree before submitting."
-          feedbackType="invalid"
-        />
-      </Form.Group>
-      <Button type="submit">Submit form</Button>
-    </Form>
-    </Container>
+            <Form.Group as={Col} md="6" controlId="phoneNumber">
+              <Form.Label>Phone Number</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Phone Number"
+                required
+                value={userDetails.phoneNumber}
+                onChange={handleInputChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                Please provide a Phone Number.
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <center><Button type="submit">Change user details</Button></center>
+        </Form>
+        <br /><br />
+
+        <center>
+
+          <Form noValidate validated={passwordValidated} onSubmit={handleSubmitPassword}>
+            <Row className="mb-3">
+              <center>
+                <Form.Group as={Col} md="4" controlId="password">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    required 
+                    onChange={handlePasswordChange}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Please provide a valid password.
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </center>
+            </Row>
+
+            <center><Button type="submit">Change Password</Button></center>
+          </Form>
+        </center>
+      </Container>
     </>
   );
 }
 
-export default Edituser;
+export default EditUser;
