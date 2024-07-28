@@ -32,7 +32,9 @@ export default function Home() {
     useEffect(() => {
         const applyFilters = () => {
             let tempItems = [...items];
-
+            //remove all the items without price
+            tempItems = tempItems.filter(item => item.price);
+            
             if (searchText) {
                 tempItems = tempItems.filter(item =>
                     item.phone_name.toLowerCase().includes(searchText.toLowerCase())
