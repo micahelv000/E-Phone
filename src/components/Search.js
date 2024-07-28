@@ -42,7 +42,7 @@ function valuetext(value) {
 }
 
 export default function Search({ searchText, onSearchTextChange, onFilterChange, priceRange, onPriceRangeChange }) {
-  const [value, setValue] = React.useState([0, 10000]);
+  const [value, setValue] = React.useState([0, 2500]);
   const [value1, setValue1] = React.useState('');
   const [value2, setValue2] = React.useState([]);
   const [value3, setValue3] = React.useState('');
@@ -189,7 +189,7 @@ export default function Search({ searchText, onSearchTextChange, onFilterChange,
             value={value}
             onChange={handleChange}
             min={0}
-            max={1000}
+            max={2500}
             valueLabelDisplay="auto"
             getAriaValueText={valuetext}
           />
