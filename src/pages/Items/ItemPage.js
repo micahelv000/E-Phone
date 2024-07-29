@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Button, Container } from 'react-bootstrap';
 import CircularProgress from '@mui/material/CircularProgress';
+import BottomLongPages from '../../components/BottomLongPages';
 
 export default function ItemPage() {
   const location = useLocation();
@@ -55,7 +56,7 @@ export default function ItemPage() {
   }, [slug]);
 
   if (loading) {
-    return <div>   <Header/>  <center> <CircularProgress size={300} /> </center> </div>;
+    return <div><Header/><center><CircularProgress size={300} /></center></div>;
   }
 
   if (error) {
@@ -91,15 +92,13 @@ export default function ItemPage() {
               </React.Fragment>
             ))}
           </ListGroup>
-          <Card.Body>
+          <Card.Body className="d-flex justify-content-between align-items-center">
             {stock > 0 ? (
               <>
-                <Button
-                  onClick={handleAddToCart} // Correctly call the function
-                >
+                <Button onClick={handleAddToCart}>
                   Add to cart
                 </Button>
-                <h2 style={{ display: 'inline' }}>for {price}$</h2>
+                <h2>{price}$</h2>
               </>
             ) : (
               <h1>Out of stock</h1>
@@ -107,6 +106,9 @@ export default function ItemPage() {
           </Card.Body>
         </Card>
       </Container>
+      <br/>
+      <BottomLongPages/>
     </div>
+    
   );
 }

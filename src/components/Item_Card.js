@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, Button as BootstrapButton } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../CartContext'; // Adjust the path as needed
+import Bottom from '../components/Bottom';
 
 export default function ItemCard({ item }) {
     const { addToCart } = useContext(CartContext);
@@ -24,7 +25,7 @@ export default function ItemCard({ item }) {
                 <Card.Text>
                     {item.stock > 0 ? `Price: ${item.price} $` : 'Out of stock'}
                 </Card.Text>
-                <BootstrapButton size="sm" variant="primary" onClick={handleViewDetails} style={{ margin: '5px' }}>
+                <BootstrapButton size="25%" variant="primary" onClick={handleViewDetails} style={{ margin: '5px' }}>
                     View Details
                 </BootstrapButton>
             </Card.Body>

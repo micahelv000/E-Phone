@@ -11,6 +11,8 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import Button from '@mui/material/Button';
+import BottomLongPages from '../../components/BottomLongPages';
+
 import './Profile.css'
 
 //const isAdmin = localStorage.getItem('isAdmin') === 'true';
@@ -90,6 +92,8 @@ export default function Profile() {
             <Fab  color="primary" margin-left="100" aria-label="edit" onClick={handleEditClick}>
                     <EditIcon />
             </Fab>
+            <BottomLongPages style={{ paddingBottom: '0px' }} />
+
         </div>
         
     );

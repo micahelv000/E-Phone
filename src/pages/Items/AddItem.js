@@ -20,6 +20,7 @@ import { Container } from "react-bootstrap";
 import FormControl from "react-bootstrap/FormControl";
 import FloatingActionButton from "@mui/material/Fab";
 import SyncIcon from "@mui/icons-material/Sync";
+import Bottom from '../../components/Bottom';
 
 function Row(props) {
   const { row } = props;
@@ -297,6 +298,8 @@ export default function CollapsibleTable() {
             </TableBody>
           </Table>
         </TableContainer>
+        <Bottom style={{ paddingBottom: '0px' }} />
+
       </Container>
     </div>
   );

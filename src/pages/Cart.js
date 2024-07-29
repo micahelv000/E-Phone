@@ -3,6 +3,7 @@ import { CartContext } from '../CartContext';
 import Header from '../components/Header';
 import CartCard from '../components/CartCard';
 import { Container, Button, Card } from 'react-bootstrap';
+import Bottom from '../components/Bottom';
 
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity } = useContext(CartContext);
@@ -63,6 +64,8 @@ export default function Cart() {
           )}
         </div>
       </Container>
+      <Bottom style={{ paddingBottom: '0px' }} />
+
     </div>
   );
 }

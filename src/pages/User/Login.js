@@ -5,6 +5,8 @@ import { Container } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import Bottom from '../../../src/components/Bottom';
+
 
 function Login() {
   const navigate = useNavigate();
@@ -58,7 +60,9 @@ function Login() {
           </Form.Group>
         </Form>
       </Container>
-    </div>
+      <Bottom style={{ paddingBottom: '0px' }} />
+      </div>
+    
   );
 }
 

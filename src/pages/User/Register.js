@@ -8,6 +8,8 @@ import Header from '../../../src/components/Header';
 import { Container } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Bottom from '../../components/Bottom';
+
 
 
 function Register() {
@@ -124,6 +126,8 @@ function Register() {
       <center><Button type="submit">Submit form</Button></center>
     </Form>
     </Container>
+    <Bottom style={{ paddingBottom: '0px' }} />
+
     </>
   );
 }

@@ -1,4 +1,5 @@
 import Header from "../components/Header";
+import Bottom from '../components/Bottom';
 
 export default function Home(){
   return (
@@ -10,6 +11,8 @@ export default function Home(){
       <p>Or maybe you dont have acsess to this page</p>
       <img src="https://news.gsu.edu/files/2019/10/monkey-800x600.jpg" alt="happy-monkey" />
       </center>
+      <Bottom style={{ paddingBottom: '0px' }} />
+
       </div>
   )
 }

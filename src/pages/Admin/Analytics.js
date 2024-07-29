@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import Header from '../../components/Header';
+import Bottom from '../../components/Bottom';
 
 
 function Analytics() {
@@ -42,6 +43,8 @@ function Analytics() {
             </div>
             </div>
         </div>
+        <Bottom style={{ paddingBottom: '0px' }} />
+
       </div>
     );
   }

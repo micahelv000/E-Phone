@@ -5,7 +5,7 @@ import Grid from "../components/Grid";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Gallery from '../components/Gallery';
 import { Container } from 'react-bootstrap';
-import Bottom from '../components/Bottom';
+import BottomLongPages from '../components/BottomLongPages';
 import './Home.css';
 import axios from 'axios';
 
@@ -56,7 +56,6 @@ export default function Home() {
     useEffect(() => {
         const applyFilters = () => {
             let tempItems = [...items];
-            // Remove all the items without price
             tempItems = tempItems.filter(item => item.price);
 
             if (searchText) {
@@ -136,7 +135,7 @@ export default function Home() {
     };
 
     return (
-        <div>
+        <div className="home-container">
             <Header />
             <Gallery />
             <Search
@@ -153,7 +152,7 @@ export default function Home() {
             <Container>
                 <Grid items={filteredItems} />
             </Container>
-            <Bottom classname="a"/>
+            <BottomLongPages/>
         </div>
     );
 }

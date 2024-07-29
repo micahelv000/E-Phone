@@ -8,6 +8,7 @@ import Header from '../../../src/components/Header';
 import { Container } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Bottom from '../../components/Bottom';
 
 function EditUser() {
   const navigate = useNavigate();
@@ -232,6 +233,8 @@ function EditUser() {
           </Form>
         </center>
       </Container>
+      <Bottom style={{ paddingBottom: '0px' }} />
+
     </>
   );
 }

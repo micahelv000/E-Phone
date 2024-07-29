@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import { Container } from 'react-bootstrap';
 import axios from 'axios';
+import Bottom from '../../components/Bottom';
 
 const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -91,7 +92,8 @@ const columns = [
                 />
             </Box>
             </Container>
-            
+            <Bottom style={{ paddingBottom: '0px' }} />
+
         </div>
     );
 }
