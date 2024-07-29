@@ -1,0 +1,25 @@
+/* Set up the container to use flexbox */
+html, body, #root {
+    height: 100%;
+    margin: 0;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content should take up remaining space */
+.content {
+    flex: 1;
+}
+
+/* Bottom component styles */
+.bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f1f1f1; /* example background color */
+    text-align: center;
+    padding: 10px 0; /* example padding */
+}

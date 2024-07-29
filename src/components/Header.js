@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { LuUser2 } from "react-icons/lu";
 import { FaCartShopping } from "react-icons/fa6";
 import EphoneImage from '../assets/images/Ephone.png';
+import './Header.css';
 
 const isLoggedIn = () => {
     return Boolean(localStorage.getItem('authToken'));
@@ -45,13 +46,13 @@ export default function Header() {
                     onClick={navigateCart} 
                     style={{ cursor: 'pointer' }}
                 >
-                    <FaCartShopping size={32}/>
+                    <FaCartShopping size={32} className="icon"/>
                 </div>
                 <div 
                     className="navbar-brand mx-auto" 
                     onClick={navigateHome}
                 >
-                    <img src={EphoneImage} alt='Ephone' height='60px' style={{ cursor: 'pointer' }}/>
+                    <img src={EphoneImage} id="logo" alt='Ephone' height='60px' style={{ cursor: 'pointer' }}/>
                 </div>
                 
                 <div 
@@ -61,7 +62,7 @@ export default function Header() {
                     onMouseLeave={handleMouseLeave}
                     style={{ position: 'relative', cursor: 'pointer' }}
                 >
-                    <LuUser2 size={32}/>
+                    <LuUser2 size={32} className="icon"/>
                     {isOpen && (
                         <div style={{
                                 position: 'absolute',

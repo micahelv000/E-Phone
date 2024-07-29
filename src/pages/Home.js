@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Gallery from '../components/Gallery';
 import { Container } from 'react-bootstrap';
 import Bottom from '../components/Bottom';
+import './Home.css';
 import axios from 'axios';
 
 export default function Home() {
@@ -152,7 +153,7 @@ export default function Home() {
             <Container>
                 <Grid items={filteredItems} />
             </Container>
-            <Bottom />
+            <Bottom classname="a"/>
         </div>
     );
 }
