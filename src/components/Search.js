@@ -27,7 +27,6 @@ function valuetext(value) {
 }
 
 export default function Search({ searchText, onSearchTextChange, onFilterChange, priceRange, onPriceRangeChange, brands, screenSizes, maxPrice }) {
-  const [value, setValue] = React.useState([0, maxPrice]);
   const [brandValue, setBrandValue] = React.useState([]);
   const [screenSizeValue, setScreenSizeValue] = React.useState([]);
   const [osValue, setOsValue] = React.useState('');
@@ -39,11 +38,6 @@ export default function Search({ searchText, onSearchTextChange, onFilterChange,
 
   const handlePriceRangeChange = (event, newValue) => {
     onPriceRangeChange(newValue);
-  };
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    handlePriceRangeChange(event, newValue);
   };
 
   const handleBrandChange = (event) => {
@@ -167,8 +161,8 @@ export default function Search({ searchText, onSearchTextChange, onFilterChange,
         <Grid item xs={2} sx={{ m: 1 }}>
           <Slider
               getAriaLabel={() => 'Price range'}
-              value={value}
-              onChange={handleChange}
+              value={priceRange}
+              onChange={handlePriceRangeChange}
               min={0}
               max={maxPrice}
               valueLabelDisplay="auto"

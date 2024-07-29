@@ -66,6 +66,7 @@ function Row(props) {
   }, [devices]);
 
   const handleInputChange = (slug, field, value) => {
+    if (value < 0) value = 0;
     setItemDetails((prevState) => ({
       ...prevState,
       [slug]: {
@@ -196,34 +197,36 @@ function Row(props) {
                       </TableCell>
                       <TableCell>
                         <FormControl
-                          type="number"
-                          value={itemDetails[device.slug]?.stock || 0}
-                          onChange={(e) =>
-                            handleInputChange(
-                              device.slug,
-                              "stock",
-                              parseInt(e.target.value)
-                            )
-                          }
-                          style={{
-                            width: "60px",
-                            display: "inline-block",
-                            margin: "0 10px",
-                          }}
+                            type="number"
+                            value={itemDetails[device.slug]?.stock || 0}
+                            onChange={(e) =>
+                                handleInputChange(
+                                    device.slug,
+                                    "stock",
+                                    parseInt(e.target.value)
+                                )
+                            }
+                            style={{
+                              width: "60px",
+                              display: "inline-block",
+                              margin: "0 10px",
+                            }}
+                            min="0"
                         />
                       </TableCell>
                       <TableCell>
                         <FormControl
-                          type="number"
-                          value={itemDetails[device.slug]?.price || 0}
-                          onChange={(e) =>
-                            handleInputChange(
-                              device.slug,
-                              "price",
-                              parseFloat(e.target.value)
-                            )
-                          }
-                          style={{ width: "100px" }}
+                            type="number"
+                            value={itemDetails[device.slug]?.price || 0}
+                            onChange={(e) =>
+                                handleInputChange(
+                                    device.slug,
+                                    "price",
+                                    parseFloat(e.target.value)
+                                )
+                            }
+                            style={{ width: "100px" }}
+                            min="0"
                         />
                       </TableCell>
                     </TableRow>

@@ -13,7 +13,7 @@ export default function Home() {
     const [brandFilter, setBrandFilter] = useState([]);
     const [osFilter, setOsFilter] = useState('');
     const [screenSizeFilter, setScreenSizeFilter] = useState([]);
-    const [priceRange, setPriceRange] = useState([0, 1000]);
+    const [priceRange, setPriceRange] = useState([0, 2500]);
     const [sortOption, setSortOption] = useState('');
     const [items, setItems] = useState([]);
     const [filteredItems, setFilteredItems] = useState([]);
