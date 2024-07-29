@@ -10,7 +10,6 @@ import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import { FitScreen, Margin } from '@mui/icons-material';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -23,30 +22,16 @@ const MenuProps = {
   },
 };
 
-//temp
-const brands = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
-
 function valuetext(value) {
   return `${value}$`;
 }
 
-export default function Search({ searchText, onSearchTextChange, onFilterChange, priceRange, onPriceRangeChange }) {
-  const [value, setValue] = React.useState([0, 2500]);
-  const [value1, setValue1] = React.useState('');
-  const [value2, setValue2] = React.useState([]);
-  const [value3, setValue3] = React.useState('');
-  const [ValueSort, setValueSort] = React.useState('');
+export default function Search({ searchText, onSearchTextChange, onFilterChange, priceRange, onPriceRangeChange, brands, screenSizes, maxPrice }) {
+  const [value, setValue] = React.useState([0, maxPrice]);
+  const [brandValue, setBrandValue] = React.useState([]);
+  const [screenSizeValue, setScreenSizeValue] = React.useState([]);
+  const [osValue, setOsValue] = React.useState('');
+  const [sortValue, setSortValue] = React.useState('');
 
   const handleSearchInputChange = (event) => {
     onSearchTextChange(event.target.value);
@@ -61,138 +46,134 @@ export default function Search({ searchText, onSearchTextChange, onFilterChange,
     handlePriceRangeChange(event, newValue);
   };
 
-  const handleSortChange = (event) => {
-    setValueSort(event.target.value);
-    onFilterChange(event.target.value);
-  };
-
-  const handleSelect1Change = (event) => {
-    setValue1(event.target.value);
-    onFilterChange(event.target.value);
-  };
-  
-
-  const handleSelect2Change = (event) => {
+  const handleBrandChange = (event) => {
     const { target: { value } } = event;
-    setValue2(typeof value === 'string' ? value.split(',') : value);
-    onFilterChange(value);
+    setBrandValue(typeof value === 'string' ? value.split(',') : value);
+    onFilterChange('brand', value);
   };
 
-  const handleSelect3Change = (event) => {
-    setValue3(event.target.value);
-    onFilterChange(event.target.value);
+  const handleScreenSizeChange = (event) => {
+    const { target: { value } } = event;
+    setScreenSizeValue(typeof value === 'string' ? value.split(',') : value);
+    onFilterChange('screenSize', value);
+  };
+
+  const handleOsChange = (event) => {
+    const value = event.target.value === "&nbsp;" ? "" : event.target.value;
+    setOsValue(value);
+    onFilterChange('os', value);
+  };
+
+  const handleSortChange = (event) => {
+    setSortValue(event.target.value);
+    onFilterChange('sort', event.target.value);
   };
 
   return (
-    <Container style={{ maxWidth: '80%'}}>
-    
-    {/* search */}
-
-      <Grid container spacing={1}>
+    <Container style={{ maxWidth: '80%' }}>
+      <Grid container spacing={1} wrap="nowrap">
         <Grid item xs={4}>
-          <input 
-            style={{ height: '56px', padding: '16.5px 14px', boxSizing: 'border-box' }}
-
-            type="text"
-            className="form-control"
-            placeholder="Search Item by name..."
-            value={searchText}
-            onChange={handleSearchInputChange}
+          <input
+              style={{ height: '56px', padding: '16.5px 14px', boxSizing: 'border-box' }}
+              type="text"
+              className="form-control"
+              placeholder="Search Item by name..."
+              value={searchText}
+              onChange={handleSearchInputChange}
           />
         </Grid>
 
-        {/* Filter by */}
         <Grid item xs="auto">
-            <FormControl sx={{ minWidth: 150, maxWidth: 150 }} fullWidth>
+          <FormControl sx={{ minWidth: 150, maxWidth: 150 }} fullWidth>
             <InputLabel id="sort-select">Sort by</InputLabel>
             <Select
-              labelId="sort-select"
-              id="sort-select"
-              value={ValueSort}
-              label="Sort by"
-              onChange={handleSortChange}
+                labelId="sort-select"
+                id="sort-select"
+                value={sortValue}
+                label="Sort by"
+                onChange={handleSortChange}
             >
-              <MenuItem value={"ABC"}>Alphabtical</MenuItem>
+              <MenuItem value={"ABC"}>Alphabetical</MenuItem>
               <MenuItem value={"inc"}>Price INC</MenuItem>
               <MenuItem value={"dec"}>Price DEC</MenuItem>
             </Select>
           </FormControl>
         </Grid>
 
-
-        {/* Screen size */}
         <Grid item xs="auto">
-        <FormControl sx={{ minWidth: 120, maxWidth: 300 }} fullWidth>
-        <InputLabel id="filter1-select">Screen size</InputLabel>
+          <FormControl sx={{ minWidth: 150, maxWidth: 300 }} fullWidth>
+            <InputLabel id="filter1-select">Screen size</InputLabel>
             <Select
-              labelId="filter1-select"
-              id="filter1-select"
-              value={value1}
-              label="Value 1"
-              onChange={handleSelect1Change}
+                labelId="filter1-select"
+                id="filter1-select"
+                multiple
+                value={screenSizeValue}
+                onChange={handleScreenSizeChange}
+                input={<OutlinedInput label="Screen size" />}
+                renderValue={(selected) => selected.join(', ')}
+                MenuProps={MenuProps}
             >
-              <MenuItem value={10}>S</MenuItem>
-              <MenuItem value={20}>M</MenuItem>
-              <MenuItem value={30}>L</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-
-        {/* Brand */}
-        <Grid item xs="auto">
-            <FormControl sx={{ minWidth: 300, maxWidth: 300 }} fullWidth>
-
-            <InputLabel id="filter2-select">Select by brand</InputLabel>
-            <Select
-              labelId="filter2-select"
-              id="filter2-select"
-              multiple
-              value={value2}
-              onChange={handleSelect2Change}
-              input={<OutlinedInput label="Brand" />}
-              renderValue={(selected) => selected.join(', ')}
-              MenuProps={MenuProps}
-            >
-              {brands.map((brand) => (
-                <MenuItem key={brand} value={brand}>
-                  <Checkbox checked={value2.indexOf(brand) > -1} />
-                  <ListItemText primary={brand} />
-                </MenuItem>
+              {screenSizes.map((size) => (
+                  <MenuItem key={size} value={size.split(' ')[0]}>
+                    <Checkbox checked={screenSizeValue.indexOf(size.split(' ')[0]) > -1} />
+                    <ListItemText primary={size} />
+                  </MenuItem>
               ))}
             </Select>
           </FormControl>
         </Grid>
 
-
-        {/* OS size */}
         <Grid item xs="auto">
-            <FormControl sx={{ minWidth: 110 }} fullWidth>
+          <FormControl sx={{ minWidth: 300, maxWidth: 300 }} fullWidth>
+            <InputLabel id="filter2-select">Select by brand</InputLabel>
+            <Select
+                labelId="filter2-select"
+                id="filter2-select"
+                multiple
+                value={brandValue}
+                onChange={handleBrandChange}
+                input={<OutlinedInput label="Brand" />}
+                renderValue={(selected) => selected.join(', ')}
+                MenuProps={MenuProps}
+            >
+              {brands.map((brand) => (
+                  <MenuItem key={brand} value={brand.split(' ')[0]}>
+                    <Checkbox checked={brandValue.indexOf(brand.split(' ')[0]) > -1} />
+                    <ListItemText primary={brand} />
+                  </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid item xs="auto">
+          <FormControl sx={{ minWidth: 110 }} fullWidth>
             <InputLabel id="filter3-select">OS</InputLabel>
             <Select
-              labelId="filter3-select"
-              id="filter3-select"
-              value={value3}
-              label="Value 3"
-              onChange={handleSelect3Change}
+                labelId="filter3-select"
+                id="filter3-select"
+                value={osValue}
+                label="OS"
+                onChange={handleOsChange}
             >
-              <MenuItem value={"IOS"}>IOS</MenuItem>
+              <MenuItem value="">&nbsp;</MenuItem>
               <MenuItem value={"Android"}>Android</MenuItem>
+              <MenuItem value={"iOS"}>iOS</MenuItem>
               <MenuItem value={"Other"}>Other</MenuItem>
             </Select>
           </FormControl>
         </Grid>
 
-        {/* Price Range */}
         <Grid item xs={2} sx={{ m: 1 }}>
           <Slider
-            getAriaLabel={() => 'Price range'}
-            value={value}
-            onChange={handleChange}
-            min={0}
-            max={2500}
-            valueLabelDisplay="auto"
-            disableSwap
-            getAriaValueText={valuetext}
+              getAriaLabel={() => 'Price range'}
+              value={value}
+              onChange={handleChange}
+              min={0}
+              max={maxPrice}
+              valueLabelDisplay="auto"
+              disableSwap
+              getAriaValueText={valuetext}
           />
         </Grid>
       </Grid>
