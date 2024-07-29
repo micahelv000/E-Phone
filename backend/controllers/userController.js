@@ -97,3 +97,43 @@ exports.getUsers = async (req, res) => {
     res.status(500).send("Error fetching users");
   }
 };
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    res.status(200).send("User deleted successfully");
+  } catch (error) {
+    res.status(500).send("Error deleting user");
+  }
+};
+
+exports.syncUsers = async (req, res) => {
+  try {
+    for (const userData of req.body) {
+      const { id, ...updateData } = userData;
+      await User.findByIdAndUpdate(id, updateData, { new: true });
+    }
+    res.status(200).send("Users updated successfully");
+  } catch (error) {
+    res.status(500).send("Error syncing users");
+  }
+};
+
+exports.updateUserById = async (req, res) => {
+  const { id } = req.params;
+  const { username, firstName, lastName, city, phoneNumber } = req.body;
+  const updateData = { username, firstName, lastName, city, phoneNumber };
+
+  try {
+    const user = await User.findByIdAndUpdate(id, updateData, { new: true });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).send("Error updating user details");
+  }
+};
