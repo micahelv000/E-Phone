@@ -30,7 +30,7 @@ exports.login = async (req, res) => {
   try {
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(400).send("User not found");
+      return res.status(400).send({ message: "Username or password is incorrect" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -38,7 +38,7 @@ exports.login = async (req, res) => {
       const token = jwt.sign({ userId: user._id }, jwtSecret);
       res.status(200).send({ message: "Login successful", token });
     } else {
-      res.status(400).send("Password is incorrect");
+      res.status(400).send({ message: "Username or password is incorrect" });
     }
   } catch (error) {
     res.status(500).send(error);
