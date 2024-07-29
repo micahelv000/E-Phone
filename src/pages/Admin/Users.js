@@ -11,6 +11,7 @@ import SyncIcon from "@mui/icons-material/Sync";
 
 export default function Users() {
   const [rows, setRows] = useState([]);
+  const [editedRows, setEditedRows] = useState(new Set());
 
   const handleDelete = async (id) => {
     try {
@@ -25,8 +26,6 @@ export default function Users() {
     }
   };
 
-
-  
   const handleUpdateUser = async (user) => {
     try {
       await axios.put(`http://localhost:5000/users/${user.id}`, user, {
@@ -35,12 +34,17 @@ export default function Users() {
         }
       });
       alert(`User ${user.id} updated successfully`);
+      // Remove the user from editedRows once update is successful
+      setEditedRows((prevEditedRows) => {
+        const newEditedRows = new Set(prevEditedRows);
+        newEditedRows.delete(user.id);
+        return newEditedRows;
+      });
     } catch (error) {
       alert(`Error updating user ${user.id}`);
       console.error(`Error updating user ${user.id}:`, error);
     }
   };
-   
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -83,7 +87,6 @@ export default function Users() {
         <Button variant="danger" onClick={() => handleDelete(params.row.id)}>
           Delete
         </Button>
-        
       ),
     },
     {
@@ -91,11 +94,24 @@ export default function Users() {
       headerName: 'Update',
       width: 150,
       renderCell: (params) => (
-        <Button variant="primary" onClick={() => handleUpdateUser(params.row)}>
+        <Button
+          variant="primary"
+          onClick={() => handleUpdateUser(params.row)}
+          disabled={!editedRows.has(params.row.id)}
+        >
           Update User
         </Button>
-      ),}
+      ),
+    }
   ];
+
+  const handleRowEdit = (updatedRow) => {
+    setEditedRows((prevEditedRows) => {
+      const newEditedRows = new Set(prevEditedRows);
+      newEditedRows.add(updatedRow.id);
+      return newEditedRows;
+    });
+  };
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -136,6 +152,7 @@ export default function Users() {
             }}
             pageSizeOptions={[20]}
             checkboxSelection
+            processRowUpdate={handleRowEdit} // Add this line to handle row edit
           />
         </Box>
       </Container>
