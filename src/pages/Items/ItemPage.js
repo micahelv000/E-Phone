@@ -1,23 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { CartContext } from '../../../src/CartContext';
 import Header from '../../../src/components/Header';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Button, Container } from 'react-bootstrap';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function ItemPage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [itemData, setItemData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { addToCart } = useContext(CartContext);
 
-  const getQueryParams = (query) => {
-    return new URLSearchParams(query);
+  const queryParams = new URLSearchParams(location.search);
+  const slug = queryParams.get('slug');
+  const price = parseFloat(queryParams.get('price')) || 0;
+  const stock = parseInt(queryParams.get('stock')) || 0;
+
+  const handleAddToCart = () => {
+    if (itemData) {
+      addToCart({ slug, ...itemData, quantity: 1, price, stock }); // Pass the entire item data with quantity and price
+      navigate('/cart'); // Redirect to the Cart page
+    }
   };
 
   useEffect(() => {
-    const queryParams = getQueryParams(location.search);
-    const slug = queryParams.get('slug');
     if (slug) {
       fetch(`http://phone-specs-api.vercel.app/${slug}`)
         .then(response => {
@@ -42,10 +52,10 @@ export default function ItemPage() {
       setError('No slug parameter provided');
       setLoading(false);
     }
-  }, [location.search]);
+  }, [slug]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>   <Header/>  <center> <CircularProgress size={300} /> </center> </div>;
   }
 
   if (error) {
@@ -56,7 +66,7 @@ export default function ItemPage() {
     <div>
       <Header />
       <Container>
-        <Card >
+        <Card>
           <Card.Img variant="top" style={{ height: '80%', width: '300px', objectFit: 'cover' }} src={itemData.thumbnail} />
           <Card.Body>
             <Card.Title>{itemData.phone_name}</Card.Title>
@@ -70,7 +80,6 @@ export default function ItemPage() {
             <ListGroup.Item>Dimensions: {itemData.dimension}</ListGroup.Item>
             <ListGroup.Item>Storage: {itemData.storage}</ListGroup.Item>
             <ListGroup.Item>OS: {itemData.os}</ListGroup.Item>
-
             {itemData.specifications.map((specGroup, index) => (
               <React.Fragment key={index}>
                 <ListGroup.Item variant="secondary" className="font-weight-bold">{specGroup.title}</ListGroup.Item>
@@ -83,7 +92,18 @@ export default function ItemPage() {
             ))}
           </ListGroup>
           <Card.Body>
-            <Button href="#">Add to cart</Button>
+            {stock > 0 ? (
+              <>
+                <Button
+                  onClick={handleAddToCart} // Correctly call the function
+                >
+                  Add to cart
+                </Button>
+                <h2 style={{ display: 'inline' }}>for {price}$</h2>
+              </>
+            ) : (
+              <h1>Out of stock</h1>
+            )}
           </Card.Body>
         </Card>
       </Container>

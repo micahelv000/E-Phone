@@ -1,27 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Card } from 'react-bootstrap';
-import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { Card, Button as BootstrapButton } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { CartContext } from '../CartContext'; // Adjust the path as needed
 
 export default function ItemCard({ item }) {
+    const { addToCart } = useContext(CartContext);
+    const navigate = useNavigate();
+
+    const handleViewDetails = () => {
+        navigate(`/item?slug=${item.slug}&price=${item.price}&stock=${item.stock}`);
+    };
+
+    const handleaddToCart = () => {
+        addToCart({ ...item, quantity: 1 }); // Assuming you want to add 1 quantity by default
+    };
+
     return (
-        <Card style={{ width: '14rem' }}>
+        <Card style={{ width: '15rem' }}>
             <Card.Img variant="top" src={item.image} />
             <Card.Body>
                 <Card.Title>{item.phone_name}</Card.Title>
                 <Card.Text>
-                    {item.price > 0 ? `Price: ${item.price} $` : 'Out of stock'}
+                    {item.stock > 0 ? `Price: ${item.price} $` : 'Out of stock'}
                 </Card.Text>
-                {item.stock > 0 ?
-                    <Button size="small" color="primary" component={Link} to={`/Item?slug=${item.slug}`}>
-                        View details
-                    </Button>
-                    :
-                    <Button disabled size="small" color="primary">
-                        Out of stock
-                    </Button>
-                }
+                <BootstrapButton size="sm" variant="primary" onClick={handleViewDetails} style={{ margin: '5px' }}>
+                    View Details
+                </BootstrapButton>
             </Card.Body>
         </Card>
     );

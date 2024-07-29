@@ -14,6 +14,7 @@ import Register from './pages/User/Register';
 import Profile from './pages/User/Profile';
 import ReactGA from 'react-ga';
 import EditUser from './pages/User/EditUser';
+import { CartProvider } from './CartContext';
 
 const TRACKING_ID = "cFpLxL70R2Wk-juZYkRzDw"; // Replace with your tracking ID
 ReactGA.initialize(TRACKING_ID);
@@ -39,6 +40,8 @@ function PageTracker() {
 
 function AppRoutes() {
   return (
+    <CartProvider>
+
     <Routes>
       <Route index element={<Home />} />
       <Route path="home" element={<Home />} />
@@ -55,6 +58,7 @@ function AppRoutes() {
       <Route path="profile" element={<Profile />} />
       <Route path="*" element={<NoPage />} />
     </Routes>
+    </CartProvider>
   );
 }
 

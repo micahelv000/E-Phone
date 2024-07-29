@@ -1,43 +1,67 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { CartContext } from '../CartContext';
 import Header from '../components/Header';
 import CartCard from '../components/CartCard';
-import { Container } from 'react-bootstrap';
-import {Button} from 'react-bootstrap';
-
+import { Container, Button, Card } from 'react-bootstrap';
 
 export default function Cart() {
-  
-    const [items, setItems] = useState([
-    { id: 1, name: 'Product 1', description: 'Description 1', price: 10.0, quantity: 1, image: '/path/to/image1.jpg' },
-    { id: 2, name: 'Product 2', description: 'Description 2', price: 20.0, quantity: 2, image: '/path/to/image2.jpg' },
-  ]);
+  const { cart, removeFromCart, updateQuantity } = useContext(CartContext);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [numberOfItems, setNumberOfItems] = useState(0);
 
-  const handleRemove = (id) => {
-    setItems(items.filter(item => item.id !== id));
+  const handleRemove = (slug) => {
+    removeFromCart(slug);
   };
 
-  const handleQuantityChange = (id, newQuantity) => {
-    setItems(items.map(item =>
-      item.id === id ? { ...item, quantity: parseInt(newQuantity, 10) } : item
-    ));
+  const handleQuantityChange = (slug, newQuantity) => {
+    updateQuantity(slug, newQuantity);
   };
+
+  useEffect(() => {
+    // Calculate total price and number of items
+    const newTotalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const newNumberOfItems = cart.reduce((count, item) => count + item.quantity, 0);
+    
+    setTotalPrice(newTotalPrice);
+    setNumberOfItems(newNumberOfItems);
+  }, [cart]);
 
   return (
     <div>
       <Header />
-      <Container maxWidth="sm">
-      <div className="shopping-cart">
-        {items.map(item => (
-          <CartCard
-            key={item.id}
-            item={item}
-            onRemove={handleRemove}
-            onQuantityChange={handleQuantityChange}
-          />
-        ))}
-      </div>
-      <br></br>
-      <Button>Chekout</Button>
+      <Container>
+        <div className="shopping-cart">
+          {cart.length === 0 ? (
+            <center>
+              <div>
+                <h2>No items in the cart.</h2>
+                <p>
+                  Please select items that you wish to purchase from the home page and then return here. <br />
+                  Take a look at our monkey:
+                </p>
+                <img src='https://news.gsu.edu/files/2019/10/monkey-800x600.jpg' alt='Monkey' />
+              </div>
+            </center>
+          ) : (
+            <>
+              {cart.map(item => (
+                <div key={item.slug}>
+                  <CartCard
+                    item={item}
+                    onRemove={() => handleRemove(item.slug)}
+                    onQuantityChange={(newQuantity) => handleQuantityChange(item.slug, newQuantity)}
+                  />
+                </div>
+              ))}
+              <center>
+                <Card className="total-price" style={{ padding: '10px', marginTop: '10px', fontSize: '18px' }}>
+                  <h3>Total price is: ${totalPrice.toFixed(2)} for {numberOfItems} {numberOfItems === 1 ? 'item' : 'items'}</h3>
+                </Card>
+                <Button style={{ marginTop: '10px' }}>Checkout</Button>
+              </center>
+            </>
+          )}
+        </div>
       </Container>
     </div>
   );

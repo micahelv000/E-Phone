@@ -80,11 +80,6 @@ export default function Header() {
                                     Logout
                                 </h6>
                             )}
-
-                            <h5 style={{ textDecoration: 'underline' }}>Admin pages</h5>
-                            <a href="admin/users" style={{ display: 'block', padding: '10px', textDecoration: 'none', color: 'black' }}><h6>Users management</h6></a>
-                            <a href="add-item" style={{ display: 'block', padding: '10px', textDecoration: 'none', color: 'black' }}><h6>Stock management</h6></a>
-                            <a href="admin/analytics" style={{ display: 'block', padding: '10px', textDecoration: 'none', color: 'black' }}><h6>Analytics</h6></a>
                         </div>
                     )}
                 </div>
