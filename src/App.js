@@ -15,6 +15,7 @@ import Profile from './pages/User/Profile';
 import ReactGA from 'react-ga';
 import EditUser from './pages/User/EditUser';
 import { CartProvider } from './CartContext';
+import AdminRoute from './components/AdminRoute';
 
 const TRACKING_ID = "cFpLxL70R2Wk-juZYkRzDw"; // Replace with your tracking ID
 ReactGA.initialize(TRACKING_ID);
@@ -40,25 +41,35 @@ function PageTracker() {
 
 function AppRoutes() {
   return (
-    <CartProvider>
-
-    <Routes>
-      <Route index element={<Home />} />
-      <Route path="home" element={<Home />} />
-      <Route path="add-item" element={<AddItem />} />
-      <Route path="admin/analytics" element={<AdminAnalytics />} />
-      <Route path="admin/users" element={<AdminUsers />} />
-      <Route path="cart" element={<Cart />} />
-      <Route path="edit-item/" element={<EditItem />} />
-      <Route path="/Item" element={<ItemPage />} />
-      <Route path="login" element={<Login />} />
-      <Route path="EditUser" element={<EditUser />} />
-
-      <Route path="register" element={<Register />} />
-      <Route path="profile" element={<Profile />} />
-      <Route path="*" element={<NoPage />} />
-    </Routes>
-    </CartProvider>
+      <CartProvider>
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="home" element={<Home />} />
+          <Route path="admin/add-item" element={
+            <AdminRoute>
+              <AddItem />
+            </AdminRoute>
+          } />
+          <Route path="admin/analytics" element={
+            <AdminRoute>
+              <AdminAnalytics />
+            </AdminRoute>
+          } />
+          <Route path="admin/users" element={
+            <AdminRoute>
+              <AdminUsers />
+            </AdminRoute>
+          } />
+          <Route path="cart" element={<Cart />} />
+          <Route path="edit-item/" element={<EditItem />} />
+          <Route path="/Item" element={<ItemPage />} />
+          <Route path="login" element={<Login />} />
+          <Route path="EditUser" element={<EditUser />} />
+          <Route path="register" element={<Register />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="*" element={<NoPage />} />
+        </Routes>
+      </CartProvider>
   );
 }
 

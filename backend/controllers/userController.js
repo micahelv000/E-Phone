@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const jwtSecret = process.env.JWT_SECRET;
 
 exports.register = async (req, res) => {
-  const { username, password, firstName, lastName, city, phoneNumber } = req.body;
+  const { username, password, firstName, lastName, city, phoneNumber, isAdmin } = req.body;
   const hashedPassword = await bcrypt.hash(password, 12);
 
   const user = new User({
@@ -14,14 +14,15 @@ exports.register = async (req, res) => {
     lastName,
     city,
     phoneNumber,
+    isAdmin
   });
 
   user.save()
-    .then((user) => {
-      const token = jwt.sign({ userId: user._id }, jwtSecret);
-      res.status(201).send({ token });
-    })
-    .catch((err) => res.status(400).send(err));
+      .then((user) => {
+        const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, jwtSecret);
+        res.status(201).send({ token });
+      })
+      .catch((err) => res.status(400).send(err));
 };
 
 exports.login = async (req, res) => {
@@ -35,7 +36,7 @@ exports.login = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
-      const token = jwt.sign({ userId: user._id }, jwtSecret);
+      const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, jwtSecret);
       res.status(200).send({ message: "Login successful", token });
     } else {
       res.status(400).send({ message: "Username or password is incorrect" });

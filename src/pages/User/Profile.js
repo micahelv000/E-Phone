@@ -8,18 +8,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import Button from '@mui/material/Button';
 import BottomLongPages from '../../components/BottomLongPages';
 
 import './Profile.css'
 
-//const isAdmin = localStorage.getItem('isAdmin') === 'true';
-const isAdmin = true;
-
 export default function Profile() {
     const [userData, setUserData] = useState({});
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -31,6 +28,7 @@ export default function Profile() {
                     }
                 });
                 setUserData(response.data);
+                setIsAdmin(response.data.isAdmin);
             } catch (error) {
                 console.error('Error fetching user data', error);
             }
@@ -48,7 +46,7 @@ export default function Profile() {
     return (
         <div>
             <Header />
-            
+
             <br />
             <Container >
                 <ProfileCard userData={userData} />
@@ -65,7 +63,7 @@ export default function Profile() {
                                 </Grid>
                                 <Grid container xs={16} columns={12}>
                                     <Grid xs={6}>
-                                        <Button href="add-item">Stock Management</Button>
+                                        <Button href="admin/add-item">Stock Management</Button>
                                     </Grid>
                                     <Grid xs={6}>
                                         <Button href="admin/analytics">Analytics</Button>
@@ -88,13 +86,12 @@ export default function Profile() {
                 </Container>
             </Container>
 
-
             <Fab  color="primary" margin-left="100" aria-label="edit" onClick={handleEditClick}>
-                    <EditIcon />
+                <EditIcon />
             </Fab>
             <BottomLongPages style={{ paddingBottom: '0px' }} />
 
         </div>
-        
+
     );
 }
