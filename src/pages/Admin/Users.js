@@ -34,7 +34,6 @@ export default function Users() {
         }
       });
       alert(`User ${user.id} updated successfully`);
-      // Remove the user from editedRows once update is successful
       setEditedRows((prevEditedRows) => {
         const newEditedRows = new Set(prevEditedRows);
         newEditedRows.delete(user.id);
@@ -45,6 +44,7 @@ export default function Users() {
       console.error(`Error updating user ${user.id}:`, error);
     }
   };
+  
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -80,6 +80,13 @@ export default function Users() {
       editable: true,
     },
     {
+      field: 'isAdmin',
+      headerName: 'Admin',
+      width: 110,
+      editable: true,
+      type: 'boolean',
+    },
+    {
       field: 'actions',
       headerName: 'Actions',
       width: 150,
@@ -110,6 +117,9 @@ export default function Users() {
       const newEditedRows = new Set(prevEditedRows);
       newEditedRows.add(updatedRow.id);
       return newEditedRows;
+    });// Update the rows state with the edited row
+    setRows((prevRows) => {
+      return prevRows.map((row) => (row.id === updatedRow.id ? updatedRow : row));
     });
   };
 
@@ -152,7 +162,7 @@ export default function Users() {
             }}
             pageSizeOptions={[20]}
             checkboxSelection
-            processRowUpdate={handleRowEdit} // Add this line to handle row edit
+            processRowUpdate={handleRowEdit}
           />
         </Box>
       </Container>

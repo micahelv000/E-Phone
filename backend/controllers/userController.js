@@ -59,8 +59,8 @@ exports.getUserDetails = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
-  const { username, firstName, lastName, city, phoneNumber } = req.body;
-  const updateData = { username, firstName, lastName, city, phoneNumber };
+  const { username, firstName, lastName, city, phoneNumber,isAdmin } = req.body;
+  const updateData = { username, firstName, lastName, city, phoneNumber,isAdmin };
 
   try {
     const options = { new: true };
@@ -125,8 +125,8 @@ exports.syncUsers = async (req, res) => {
 
 exports.updateUserById = async (req, res) => {
   const { id } = req.params;
-  const { username, firstName, lastName, city, phoneNumber } = req.body;
-  const updateData = { username, firstName, lastName, city, phoneNumber };
+  const { username, firstName, lastName, city, phoneNumber, isAdmin } = req.body;
+  const updateData = { username, firstName, lastName, city, phoneNumber, isAdmin };
 
   try {
     const user = await User.findByIdAndUpdate(id, updateData, { new: true });
@@ -135,6 +135,6 @@ exports.updateUserById = async (req, res) => {
     }
     res.status(200).send(user);
   } catch (error) {
-    res.status(500).send("Error updating user details");
+    res.status (500).send("Error updating user details");
   }
 };
