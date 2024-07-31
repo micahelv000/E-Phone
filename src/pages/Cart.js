@@ -1,14 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { CartContext } from '../CartContext';
 import Header from '../components/Header';
 import CartCard from '../components/CartCard';
 import { Container, Button, Card } from 'react-bootstrap';
 import Bottom from '../components/Bottom';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Cart() {
-  const { cart, removeFromCart, updateQuantity } = useContext(CartContext);
+  const { cart, removeFromCart, updateQuantity, clearCart } = useContext(CartContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [numberOfItems, setNumberOfItems] = useState(0);
+  const userEmail = 'user@example.com'; // Replace with actual user data
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleRemove = (slug) => {
     removeFromCart(slug);
@@ -18,11 +23,41 @@ export default function Cart() {
     updateQuantity(slug, newQuantity);
   };
 
+  const handleCheckout = async () => {
+    const transaction = {
+      TransactionsId: uuidv4(), // Use UUID for unique ID
+      User: userEmail,
+      Items: cart.map(item => ({
+        ItemSlug: item.slug,
+        ItemName: item.name,
+        Quantity: item.quantity,
+        Price: item.price
+      })),
+      TotalPrice: totalPrice,
+      TotalQuantity: numberOfItems,
+      OrderDate: new Date()
+    };
+
+    try {
+      const response = await axios.post('/api/transactions', transaction);
+      console.log('Transaction successful:', response.data);
+      clearCart();
+      alert('Transaction successful!');
+      
+      // Redirect to transactionDetails page with transaction ID
+      navigate(`/transactionDetails/${transaction.TransactionsId}`);
+      
+    } catch (error) {
+      console.error('Transaction failed:', error);
+      alert('Transaction failed, please try again.');
+    }
+  };
+
   useEffect(() => {
     // Calculate total price and number of items
     const newTotalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const newNumberOfItems = cart.reduce((count, item) => count + item.quantity, 0);
-    
+
     setTotalPrice(newTotalPrice);
     setNumberOfItems(newNumberOfItems);
   }, [cart]);
@@ -56,16 +91,15 @@ export default function Cart() {
               ))}
               <center>
                 <Card className="total-price" style={{ padding: '10px', marginTop: '10px', fontSize: '18px' }}>
-                  <h3>Total price is: ${totalPrice.toFixed(2)} for {numberOfItems} {numberOfItems === 1 ? 'item' : 'items'}</h3>
+                  <h3>Total price: ${totalPrice.toFixed(2)} for {numberOfItems} {numberOfItems === 1 ? 'item' : 'items'}</h3>
                 </Card>
-                <Button style={{ marginTop: '10px' }}>Checkout</Button>
+                <Button onClick={handleCheckout} style={{ marginTop: '10px', marginBottom: '90px' }}>Checkout</Button>
               </center>
             </>
           )}
         </div>
       </Container>
       <Bottom style={{ paddingBottom: '0px' }} />
-
     </div>
   );
 }

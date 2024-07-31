@@ -6,6 +6,7 @@ const connectDB = require("./config/db");
 
 const userRoutes = require("./routes/userRoutes");
 const itemRoutes = require("./routes/itemRoutes");
+const transactionsRouters = require("./routes/transactionsRouters");
 
 const app = express();
 const port = 5000;
@@ -17,6 +18,8 @@ app.use(cors());
 
 app.use("/", userRoutes);
 app.use("/", itemRoutes);
+app.use("/", transactionsRouters);
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

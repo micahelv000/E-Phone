@@ -15,6 +15,7 @@ import Profile from './pages/User/Profile';
 import ReactGA from 'react-ga';
 import EditUser from './pages/User/EditUser';
 import { CartProvider } from './CartContext';
+import TransactionDetails from './pages/TransactionDetails';
 import AdminRoute from './components/AdminRoute';
 
 const TRACKING_ID = "cFpLxL70R2Wk-juZYkRzDw"; // Replace with your tracking ID
@@ -67,6 +68,7 @@ function AppRoutes() {
           <Route path="EditUser" element={<EditUser />} />
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="TransactionDetails" element={<TransactionDetails />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </CartProvider>
