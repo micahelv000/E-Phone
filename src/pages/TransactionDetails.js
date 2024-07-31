@@ -13,7 +13,7 @@ export default function TransactionDetails() {
     useEffect(() => {
         const fetchTransaction = async () => {
             try {
-                const response = await axios.get(`/api/transactions/${id}`);
+                const response = await axios.get(`http://localhost:5000/Transaction/${id}`);
                 setTransaction(response.data);
             } catch (err) {
                 setError(err.message);

@@ -39,7 +39,7 @@ export default function Cart() {
     };
 
     try {
-      const response = await axios.post('/api/transactions', transaction);
+      const response = await axios.post('http://localhost:5000/Transaction', transaction);
       console.log('Transaction successful:', response.data);
       clearCart();
       alert('Transaction successful!');

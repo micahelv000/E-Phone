@@ -6,7 +6,7 @@ const connectDB = require("./config/db");
 
 const userRoutes = require("./routes/userRoutes");
 const itemRoutes = require("./routes/itemRoutes");
-const transactionsRouters = require("./routes/transactionsRouters");
+const transactionsRouters = require("./routes/TransactionRoutes");
 
 const app = express();
 const port = 5000;
