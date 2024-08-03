@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function Bottom(options) {
+export default function Bottom() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-dark fixed-bottom">
             <div className="container-fluid">

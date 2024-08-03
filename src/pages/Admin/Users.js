@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'; 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from '../../components/Header.js';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import { Container, Button } from 'react-bootstrap';
-import axios from 'axios';
+import axiosInstance from '../../axiosConfig';
 import BottomLongPages from '../../components/BottomLongPages';
-import FloatingActionButton from "@mui/material/Fab";
-import SyncIcon from "@mui/icons-material/Sync";
 
 export default function Users() {
   const [rows, setRows] = useState([]);
@@ -15,7 +13,7 @@ export default function Users() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/users/${id}`, {
+      await axiosInstance.delete(`http://localhost:5000/users/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }
@@ -28,7 +26,7 @@ export default function Users() {
 
   const handleUpdateUser = async (user) => {
     try {
-      await axios.put(`http://localhost:5000/users/${user.id}`, user, {
+      await axiosInstance.put(`http://localhost:5000/users/${user.id}`, user, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }
@@ -44,7 +42,6 @@ export default function Users() {
       console.error(`Error updating user ${user.id}:`, error);
     }
   };
-  
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -91,9 +88,9 @@ export default function Users() {
       headerName: 'Actions',
       width: 150,
       renderCell: (params) => (
-        <Button variant="danger" onClick={() => handleDelete(params.row.id)}>
-          Delete
-        </Button>
+          <Button variant="danger" onClick={() => handleDelete(params.row.id)}>
+            Delete
+          </Button>
       ),
     },
     {
@@ -101,13 +98,13 @@ export default function Users() {
       headerName: 'Update',
       width: 150,
       renderCell: (params) => (
-        <Button
-          variant="primary"
-          onClick={() => handleUpdateUser(params.row)}
-          disabled={!editedRows.has(params.row.id)}
-        >
-          Update User
-        </Button>
+          <Button
+              variant="primary"
+              onClick={() => handleUpdateUser(params.row)}
+              disabled={!editedRows.has(params.row.id)}
+          >
+            Update User
+          </Button>
       ),
     }
   ];
@@ -117,7 +114,7 @@ export default function Users() {
       const newEditedRows = new Set(prevEditedRows);
       newEditedRows.add(updatedRow.id);
       return newEditedRows;
-    });// Update the rows state with the edited row
+    });
     setRows((prevRows) => {
       return prevRows.map((row) => (row.id === updatedRow.id ? updatedRow : row));
     });
@@ -126,13 +123,13 @@ export default function Users() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/users', {
+        const response = await axiosInstance.get('http://localhost:5000/users', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
           }
         });
-        const users = response.data.map((user, index) => ({
-          id: user._id, // Assuming _id is the unique identifier
+        const users = response.data.map((user) => ({
+          id: user._id,
           ...user
         }));
         setRows(users);
@@ -145,29 +142,29 @@ export default function Users() {
   }, []);
 
   return (
-    <div>
-      <Header/>
-      <Container>
-        <center><h1>Admin page for edit users details</h1></center>
-        <Box sx={{ height: '80vh', width: '100%' }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 20,
-                },
-              },
-            }}
-            pageSizeOptions={[20]}
-            checkboxSelection
-            processRowUpdate={handleRowEdit}
-          />
-        </Box>
-      </Container>
-      <br/>
-      <BottomLongPages style={{ paddingBottom: '0px' }} />
-    </div>
+      <div>
+        <Header/>
+        <Container>
+          <center><h1>Admin page for edit users details</h1></center>
+          <Box sx={{ height: '80vh', width: '100%' }}>
+            <DataGrid
+                rows={rows}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 20,
+                    },
+                  },
+                }}
+                pageSizeOptions={[20]}
+                checkboxSelection
+                processRowUpdate={handleRowEdit}
+            />
+          </Box>
+        </Container>
+        <br/>
+        <BottomLongPages style={{ paddingBottom: '0px' }} />
+      </div>
   );
 }

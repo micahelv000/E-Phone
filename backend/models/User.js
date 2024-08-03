@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 
 const userSchema = new mongoose.Schema({
     username: String,
@@ -7,7 +8,8 @@ const userSchema = new mongoose.Schema({
     lastName: String,
     city: String,
     phoneNumber: String,
-    isAdmin: { type: Boolean, default: false }
+    isAdmin: { type: Boolean, default: false },
+    tokenVersion: { type: String, default: uuidv4 }
 });
 
 const User = mongoose.model('User', userSchema);

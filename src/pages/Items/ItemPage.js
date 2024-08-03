@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CartContext } from '../../../src/CartContext';
+import { CartContext } from '../../CartContext';
 import Header from '../../../src/components/Header';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -30,7 +30,7 @@ export default function ItemPage() {
 
   useEffect(() => {
     if (slug) {
-      fetch(`http://phone-specs-api.vercel.app/${slug}`)
+      fetch(`https://phone-specs-api.vercel.app/${slug}`)
         .then(response => {
           if (!response.ok) {
             throw new Error(`Error fetching data: ${response.statusText}`);

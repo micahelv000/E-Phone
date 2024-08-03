@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function BottomLongPages(options) {
+export default function BottomLongPages() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-dark">
             <div className="container-fluid">

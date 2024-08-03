@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from '../components/Header';
+import axiosInstance from "../axiosConfig";
 
 export default function TransactionDetails() {
     const { id } = useParams();
@@ -13,7 +13,7 @@ export default function TransactionDetails() {
     useEffect(() => {
         const fetchTransaction = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/transaction/${id}`);
+                const response = await axiosInstance.get(`http://localhost:5000/transaction/${id}`);
                 setTransaction(response.data);
             } catch (err) {
                 setError(err.message);

@@ -21,6 +21,7 @@ import FormControl from "react-bootstrap/FormControl";
 import FloatingActionButton from "@mui/material/Fab";
 import SyncIcon from "@mui/icons-material/Sync";
 import Bottom from '../../components/Bottom';
+import axiosInstance from "../../axiosConfig";
 
 function Row(props) {
   const { row } = props;
@@ -48,7 +49,7 @@ function Row(props) {
 
   useEffect(() => {
     devices.forEach((device) => {
-      axios
+      axiosInstance
         .get(`http://localhost:5000/item-details/${device.slug}`)
         .then((response) => {
           setItemDetails((prevState) => ({
@@ -120,7 +121,7 @@ function Row(props) {
               phone_name: data.phone_name
             };
 
-            axios
+            axiosInstance
               .put(
                 `http://localhost:5000/update-item/${device.slug}`,
                 updatedDetails

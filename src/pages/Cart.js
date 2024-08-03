@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { CartContext } from '../CartContext';
 import Header from '../components/Header';
 import CartCard from '../components/CartCard';
 import { Container, Button, Card } from 'react-bootstrap';
 import Bottom from '../components/Bottom';
-import { v4 as uuidv4 } from 'uuid';
+import axiosInstance from "../axiosConfig";
 
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, clearCart } = useContext(CartContext);
@@ -43,7 +42,7 @@ export default function Cart() {
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/create-transaction', transaction);
+      const response = await axiosInstance.post('http://localhost:5000/create-transaction', transaction);
       console.log('Transaction successful:', response.data);
       clearCart();
       alert('Transaction successful!');

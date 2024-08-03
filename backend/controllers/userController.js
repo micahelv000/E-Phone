@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const jwtSecret = process.env.JWT_SECRET;
+const { v4: uuidv4 } = require('uuid');
 
 exports.register = async (req, res) => {
   const { username, password, firstName, lastName, city, phoneNumber, isAdmin } = req.body;
@@ -14,12 +14,16 @@ exports.register = async (req, res) => {
     lastName,
     city,
     phoneNumber,
-    isAdmin
+    isAdmin,
+    tokenVersion: uuidv4()
   });
 
   user.save()
       .then((user) => {
-        const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, jwtSecret);
+        const token = jwt.sign(
+            { userId: user._id, isAdmin: user.isAdmin, tokenVersion: user.tokenVersion },
+            hashedPassword
+        );
         res.status(201).send({ token });
       })
       .catch((err) => res.status(400).send(err));
@@ -36,7 +40,10 @@ exports.login = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
-      const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, jwtSecret);
+      const token = jwt.sign(
+          { userId: user._id, isAdmin: user.isAdmin, tokenVersion: user.tokenVersion },
+          user.password
+      );
       res.status(200).send({ message: "Login successful", token });
     } else {
       res.status(400).send({ message: "Username or password is incorrect" });
@@ -129,12 +136,19 @@ exports.updateUserById = async (req, res) => {
   const updateData = { username, firstName, lastName, city, phoneNumber, isAdmin };
 
   try {
-    const user = await User.findByIdAndUpdate(id, updateData, { new: true });
+    const user = await User.findById(id);
     if (!user) {
       return res.status(404).send("User not found");
     }
-    res.status(200).send(user);
+
+    // Check if isAdmin status is changing
+    if (user.isAdmin !== isAdmin) {
+      updateData.tokenVersion = uuidv4(); // Update tokenVersion to invalidate the token
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, updateData, { new: true });
+    res.status(200).send(updatedUser);
   } catch (error) {
-    res.status (500).send("Error updating user details");
+    res.status(500).send("Error updating user details");
   }
 };

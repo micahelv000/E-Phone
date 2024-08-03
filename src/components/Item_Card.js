@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, Button as BootstrapButton } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../CartContext'; // Adjust the path as needed
-import Bottom from '../components/Bottom';
 
 export default function ItemCard({ item }) {
     const { addToCart } = useContext(CartContext);

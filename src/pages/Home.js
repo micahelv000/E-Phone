@@ -7,7 +7,7 @@ import Gallery from '../components/Gallery';
 import { Container } from 'react-bootstrap';
 import BottomLongPages from '../components/BottomLongPages';
 import './Home.css';
-import axios from 'axios';
+import axiosInstance from "../axiosConfig";
 
 export default function Home() {
     const [searchText, setSearchText] = useState('');
@@ -25,7 +25,7 @@ export default function Home() {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/items');
+                const response = await axiosInstance.get('http://localhost:5000/items');
                 setItems(response.data);
                 setFilteredItems(response.data);
 
