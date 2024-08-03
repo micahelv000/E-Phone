@@ -12,18 +12,18 @@ export const CartProvider = ({ children }) => {
   const addToCart = (item) => {
     setCart((prevCart) => {
       const existingItemIndex = prevCart.findIndex(cartItem => cartItem.slug === item.slug);
-      
+
       let newCart;
       if (existingItemIndex >= 0) {
         newCart = prevCart.map((cartItem, index) =>
-          index === existingItemIndex
-            ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
-            : cartItem
+            index === existingItemIndex
+                ? { ...cartItem, quantity: cartItem.quantity + Number(item.quantity) }
+                : cartItem
         );
       } else {
-        newCart = [...prevCart, item];
+        newCart = [...prevCart, { ...item, quantity: Number(item.quantity), price: Number(item.price) }];
       }
-      
+
       localStorage.setItem('cart', JSON.stringify(newCart));
       return newCart;
     });

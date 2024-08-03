@@ -3,7 +3,14 @@ const Transaction = require('../models/Transaction');
 // Create a new transaction
 exports.createTransaction = async (req, res) => {
     try {
-        const newTransaction = new Transaction(req.body); // Use Transaction
+        const { User, Items, TotalPrice, TotalQuantity, OrderDate } = req.body;
+        const newTransaction = new Transaction({
+            User,
+            Items,
+            TotalPrice,
+            TotalQuantity,
+            OrderDate
+        });
         const savedTransaction = await newTransaction.save();
         res.status(201).json(savedTransaction);
     } catch (error) {

@@ -24,43 +24,48 @@ export default function Cart() {
   };
 
   const handleCheckout = async () => {
+    const sanitizedCart = cart.map(item => ({
+      ItemSlug: item.slug,
+      ItemName: item.phone_name,
+      Quantity: Number(item.quantity),
+      Price: Number(item.price)
+    }));
+
+    const totalPrice = sanitizedCart.reduce((sum, item) => sum + item.Price * item.Quantity, 0);
+    const totalQuantity = sanitizedCart.reduce((count, item) => count + item.Quantity, 0);
+
     const transaction = {
-      TransactionsId: uuidv4(), // Use UUID for unique ID
       User: userEmail,
-      Items: cart.map(item => ({
-        ItemSlug: item.slug,
-        ItemName: item.name,
-        Quantity: item.quantity,
-        Price: item.price
-      })),
+      Items: sanitizedCart,
       TotalPrice: totalPrice,
-      TotalQuantity: numberOfItems,
+      TotalQuantity: totalQuantity,
       OrderDate: new Date()
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/Transaction', transaction);
+      const response = await axios.post('http://localhost:5000/create-transaction', transaction);
       console.log('Transaction successful:', response.data);
       clearCart();
       alert('Transaction successful!');
-      
+
       // Redirect to transactionDetails page with transaction ID
-      navigate(`/transactionDetails/${transaction.TransactionsId}`);
-      
+      navigate(`/transactionDetails/${response.data._id}`);
+
     } catch (error) {
       console.error('Transaction failed:', error);
       alert('Transaction failed, please try again.');
     }
   };
 
-  useEffect(() => {
-    // Calculate total price and number of items
-    const newTotalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const newNumberOfItems = cart.reduce((count, item) => count + item.quantity, 0);
+useEffect(() => {
+  // Calculate total price and number of items
+  const newTotalPrice = cart.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0);
+  const newNumberOfItems = cart.reduce((count, item) => count + Number(item.quantity), 0);
 
-    setTotalPrice(newTotalPrice);
-    setNumberOfItems(newNumberOfItems);
-  }, [cart]);
+  setTotalPrice(newTotalPrice);
+  setNumberOfItems(newNumberOfItems);
+}, [cart]);
+
 
   return (
     <div>

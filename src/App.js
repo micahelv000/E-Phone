@@ -68,7 +68,7 @@ function AppRoutes() {
           <Route path="EditUser" element={<EditUser />} />
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="TransactionDetails" element={<TransactionDetails />} />
+          <Route path="TransactionDetails/:id" element={<TransactionDetails />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </CartProvider>

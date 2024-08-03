@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css'; 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from '../components/Header';
 
 export default function TransactionDetails() {
-    const { id } = useParams(); // Assuming you're using React Router to get the transaction ID from the URL
+    const { id } = useParams();
     const [transaction, setTransaction] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -13,7 +13,7 @@ export default function TransactionDetails() {
     useEffect(() => {
         const fetchTransaction = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/Transaction/${id}`);
+                const response = await axios.get(`http://localhost:5000/transaction/${id}`);
                 setTransaction(response.data);
             } catch (err) {
                 setError(err.message);
@@ -35,7 +35,7 @@ export default function TransactionDetails() {
                 <h1>Transaction Details</h1>
                 <div className="card">
                     <div className="card-body">
-                        <h5 className="card-title">Transaction ID: {transaction.TransactionsId}</h5>
+                        <h5 className="card-title">Transaction ID: {transaction._id}</h5>
                         <p className="card-text">User: {transaction.User}</p>
                         <p className="card-text">Order Date: {new Date(transaction.OrderDate).toLocaleString()}</p>
                         <p className="card-text">Total Price: ${transaction.TotalPrice.toFixed(2)}</p>
