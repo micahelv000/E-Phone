@@ -1,65 +1,18 @@
 {
-  "name": "my-app",
+  "name": "e-phone",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@mui/icons-material": "^5.16.4",
-    "@mui/joy": "^5.0.0-beta.48",
-    "@mui/material": "^5.16.4",
-    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
-    "@mui/x-data-grid": "^7.10.0",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.7.2",
-    "bcryptjs": "^2.4.3",
-    "bootstrap": "^5.3.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.5.1",
-    "prop-types": "^15.8.1",
-    "react": "^18.3.1",
-    "react-bootstrap": "^2.10.4",
-    "react-dom": "^18.3.1",
-    "react-ga": "^3.3.1",
-    "react-icons": "^5.2.1",
-    "react-router-dom": "^6.24.1",
-    "react-scripts": "5.0.1",
-    "react-slick": "^0.30.2",
-    "slick-carousel": "^1.8.1",
-    "styled-components": "^6.1.11",
-    "uuid": "^10.0.0",
-    "web-vitals": "^2.1.4"
-  },
-  "devDependencies": {
     "concurrently": "^7.0.0"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"node backend/backend.js\"",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "start": "concurrently \"npm start --workspace=client\" \"npm start --workspace=server\"",
+    "build": "npm run build --workspace=client",
+    "test": "npm test --workspace=client",
+    "eject": "npm run eject --workspace=client"
   }
 }
