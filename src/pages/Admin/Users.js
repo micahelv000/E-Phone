@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from '../../components/Header.js';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-import { Container, Button } from 'react-bootstrap';
+import { Container, Button, ButtonGroup } from 'react-bootstrap';
 import axiosInstance from '../../axiosConfig';
 import BottomLongPages from '../../components/BottomLongPages';
 
@@ -40,6 +40,19 @@ export default function Users() {
     } catch (error) {
       alert(`Error updating user ${user.id}`);
       console.error(`Error updating user ${user.id}:`, error);
+    }
+  };
+
+  const handleForceLogout = async (id) => {
+    try {
+      await axiosInstance.post(`http://localhost:5000/users/${id}/force-logout`, {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+      alert(`User ${id} has been logged out`);
+    } catch (error) {
+      console.error('Error forcing log out:', error);
     }
   };
 
@@ -86,25 +99,26 @@ export default function Users() {
     {
       field: 'actions',
       headerName: 'Actions',
-      width: 150,
+      width: 300,
       renderCell: (params) => (
+        <ButtonGroup style={{ gap: '5px' }}>
           <Button variant="danger" onClick={() => handleDelete(params.row.id)}>
             Delete
           </Button>
-      ),
-    },
-    {
-      field: 'edit',
-      headerName: 'Update',
-      width: 150,
-      renderCell: (params) => (
           <Button
-              variant="primary"
-              onClick={() => handleUpdateUser(params.row)}
-              disabled={!editedRows.has(params.row.id)}
+            variant="primary"
+            onClick={() => handleUpdateUser(params.row)}
+            disabled={!editedRows.has(params.row.id)}
           >
-            Update User
+            Update
           </Button>
+          <Button
+            variant="warning"
+            onClick={() => handleForceLogout(params.row.id)}
+          >
+            Force Log Out
+          </Button>
+        </ButtonGroup>
       ),
     }
   ];
@@ -142,29 +156,29 @@ export default function Users() {
   }, []);
 
   return (
-      <div>
-        <Header/>
-        <Container>
-          <center><h1>Admin page for edit users details</h1></center>
-          <Box sx={{ height: '80vh', width: '100%' }}>
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 20,
-                    },
-                  },
-                }}
-                pageSizeOptions={[20]}
-                checkboxSelection
-                processRowUpdate={handleRowEdit}
-            />
-          </Box>
-        </Container>
-        <br/>
-        <BottomLongPages style={{ paddingBottom: '0px' }} />
-      </div>
+    <div>
+      <Header/>
+      <Container>
+        <center><h1>Admin page for edit users details</h1></center>
+        <Box sx={{ height: '80vh', width: '100%' }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 20,
+                },
+              },
+            }}
+            pageSizeOptions={[20]}
+            checkboxSelection
+            processRowUpdate={handleRowEdit}
+          />
+        </Box>
+      </Container>
+      <br/>
+      <BottomLongPages style={{ paddingBottom: '0px' }} />
+    </div>
   );
 }

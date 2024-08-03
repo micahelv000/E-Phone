@@ -152,3 +152,21 @@ exports.updateUserById = async (req, res) => {
     res.status(500).send("Error updating user details");
   }
 };
+
+exports.forceLogout = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    user.tokenVersion = uuidv4(); // Invalidate the token
+    await user.save();
+
+    res.status(200).send("User logged out successfully");
+  } catch (error) {
+    res.status(500).send("Error logging out user");
+  }
+};

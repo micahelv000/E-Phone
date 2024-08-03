@@ -17,12 +17,12 @@ exports.authenticateToken = async (req, res, next) => {
       return res.status(403).send("Invalid token");
     }
 
-    jwt.verify(token, user.password, (err, user) => {
+    jwt.verify(token, user.password, (err, decodedToken) => {
       if (err) {
         return res.status(403).send("Invalid token");
       }
 
-      if (user.tokenVersion !== decoded.tokenVersion) {
+      if (user.tokenVersion !== decodedToken.tokenVersion) {
         return res.status(403).send("Token invalidated");
       }
 
