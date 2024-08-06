@@ -16,6 +16,7 @@ import axiosInstance from "../../utils/axiosConfig";
 export default function Profile() {
     const [userData, setUserData] = useState({});
     const [isAdmin, setIsAdmin] = useState(false);
+    const [transactions, setTransactions] = useState([]);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -33,13 +34,32 @@ export default function Profile() {
             }
         };
 
+        const fetchTransactions = async () => {
+            const token = localStorage.getItem('authToken');
+            try {
+                const response = await axiosInstance.get('http://localhost:5000/all-transactions', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setTransactions(response.data);
+            } catch (error) {
+                console.error('Error fetching transactions', error);
+            }
+        };
+
         fetchUserData();
+        fetchTransactions();
     }, []);
 
     const navigate = useNavigate();
 
     const handleEditClick = () => {
         navigate('/Edituser');
+    };
+
+    const handleTransactionClick = (id) => {
+        navigate(`/transactionDetails/${id}`);
     };
 
     return (
@@ -74,23 +94,32 @@ export default function Profile() {
                 )}
 
                 <Container className="admin-panel">
-                    <center><h2>Last Transaction</h2></center>
+                    <center><h2>Last Transactions</h2></center>
                     <Stack spacing={5}>
                         <div className="trans">
-                            <div className="trans-item">Transaction number: XXXX | ZZ items | YYYY$</div>
-                            <div className="trans-item">Transaction number: XXXX | ZZ items | YYYY$</div>
-                            <div className="trans-item">Transaction number: XXXX | ZZ items | YYYY$</div>
+                            {transactions.map(transaction => (
+                                <div
+                                    key={transaction._id}
+                                    className="trans-item"
+                                    onClick={() => handleTransactionClick(transaction._id)}
+                                    style={{ cursor: 'pointer', padding: '10px', border: '1px solid #ccc', borderRadius: '5px', marginBottom: '10px' }}
+                                >
+                                    <p><strong>Transaction ID:</strong> {transaction._id}</p>
+                                    <p><strong>Total Quantity:</strong> {transaction.TotalQuantity} items</p>
+                                    <p><strong>Total Price:</strong> ${transaction.TotalPrice.toFixed(2)}</p>
+                                    <p><strong>Order Date:</strong> {new Date(transaction.OrderDate).toLocaleString()}</p>
+                                </div>
+                            ))}
                         </div>
                     </Stack>
                 </Container>
             </Container>
 
-            <Fab  color="primary" margin-left="100" aria-label="edit" onClick={handleEditClick}>
+            <Fab color="primary" margin-left="100" aria-label="edit" onClick={handleEditClick}>
                 <EditIcon />
             </Fab>
             <BottomLongPages style={{ paddingBottom: '0px' }} />
 
         </div>
-
     );
 }

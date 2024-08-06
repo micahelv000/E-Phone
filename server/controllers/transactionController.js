@@ -1,11 +1,14 @@
+const jwt = require('jsonwebtoken');
 const Transaction = require('../models/Transaction');
 
 // Create a new transaction
 exports.createTransaction = async (req, res) => {
     try {
-        const { User, Items, TotalPrice, TotalQuantity, OrderDate } = req.body;
+        const userId = req.user._id;
+
+        const { Items, TotalPrice, TotalQuantity, OrderDate } = req.body;
         const newTransaction = new Transaction({
-            User,
+            UserId: userId,
             Items,
             TotalPrice,
             TotalQuantity,
@@ -21,13 +24,14 @@ exports.createTransaction = async (req, res) => {
 // Get all transactions
 exports.getAllTransactions = async (req, res) => {
     try {
-        const transactions = await Transaction.find(); // Use Transaction
+        const userId = req.user._id;
+
+        const transactions = await Transaction.find({ UserId: userId });
         res.status(200).json(transactions);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
-
 // Get a single transaction by ID
 exports.getTransactionById = async (req, res) => {
     try {

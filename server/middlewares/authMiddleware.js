@@ -26,7 +26,7 @@ exports.authenticateToken = async (req, res, next) => {
         return res.status(403).send("Token invalidated");
       }
 
-      req.user = user;
+      req.user = { ...user.toObject()};
       next();
     });
   } catch (error) {
