@@ -6,10 +6,13 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Bottom from '../../components/layout/Bottom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import './Login.css';
 
 function Login() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -25,6 +28,10 @@ function Login() {
       console.error(error);
       setErrorMessage(error.response?.data?.message || 'An error occurred');
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
   };
 
   return (
@@ -43,7 +50,19 @@ function Login() {
 
           <Form.Group controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Enter your password" />
+            <div className="password-wrapper">
+              <Form.Control
+                type={passwordVisible ? 'text' : 'password'}
+                placeholder="Enter your password"
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="btn btn-outline-secondary password-toggle"
+              >
+                {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             <Form.Text className="text-muted"></Form.Text>
           </Form.Group>
 
