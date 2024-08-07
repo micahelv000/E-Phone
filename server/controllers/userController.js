@@ -2,6 +2,9 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
+const axios = require('axios');
+require('form-data');
+const path = require('path');
 
 exports.register = async (req, res) => {
   const { username, password, firstName, lastName, city, phoneNumber, isAdmin } = req.body;
@@ -15,7 +18,8 @@ exports.register = async (req, res) => {
     city,
     phoneNumber,
     isAdmin,
-    tokenVersion: uuidv4()
+    tokenVersion: uuidv4(),
+    profilePictureUrl: `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=random&size=200&rounded=true`
   });
 
   user.save()
@@ -66,12 +70,31 @@ exports.getUserDetails = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
-  const { username, firstName, lastName, city, phoneNumber,isAdmin } = req.body;
-  const updateData = { username, firstName, lastName, city, phoneNumber,isAdmin };
+  const { username, firstName, lastName, city, phoneNumber, isAdmin } = req.body;
+  const updateData = { username, firstName, lastName, city, phoneNumber, isAdmin };
+
+  if (req.file) {
+    const fileExtension = path.extname(req.file.originalname);
+    try {
+      const response = await axios({
+        method: 'put',
+        url: `https://files.blahaj.land/remote.php/dav/files/deftera/user-images/${req.user._id}${fileExtension}`,
+        data: req.file.buffer,
+        headers: {
+          'Content-Type': req.file.mimetype,
+          'Authorization': `Basic ${Buffer.from('deftera:***REMOVED***').toString('base64')}`
+        }
+      });
+
+      updateData.profilePictureUrl = response.config.url;
+    } catch (error) {
+      return res.status(500).send('Error uploading profile picture');
+    }
+  }
 
   try {
     const options = { new: true };
-    const user = await User.findByIdAndUpdate(req.user.userId, updateData, options);
+    const user = await User.findByIdAndUpdate(req.user._id, updateData, options);
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -87,7 +110,7 @@ exports.updatePassword = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 12);
     const options = { new: true };
-    const user = await User.findByIdAndUpdate(req.user.userId, { password: hashedPassword }, options);
+    const user = await User.findByIdAndUpdate(req.user._id, { password: hashedPassword }, options);
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -168,5 +191,30 @@ exports.forceLogout = async (req, res) => {
     res.status(200).send("User logged out successfully");
   } catch (error) {
     res.status(500).send("Error logging out user");
+  }
+};
+
+exports.getUserProfilePicture = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+
+  if (!user || !user.profilePictureUrl) {
+    return res.status(404).send('Profile picture not found');
+  }
+
+  try {
+    const response = await axios({
+      method: 'get',
+      url: user.profilePictureUrl,
+      responseType: 'arraybuffer',
+      headers: {
+        'Authorization': `Basic ${Buffer.from('deftera:***REMOVED***').toString('base64')}`
+      }
+    });
+
+    res.set('Content-Type', response.headers['content-type']);
+    res.send(response.data);
+  } catch (error) {
+    res.status(500).send('Error fetching profile picture');
   }
 };

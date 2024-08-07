@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
     city: String,
     phoneNumber: String,
     isAdmin: { type: Boolean, default: false },
-    tokenVersion: { type: String, default: uuidv4 }
+    tokenVersion: { type: String, default: uuidv4 },
+    profilePictureUrl: String
 });
 
 const User = mongoose.model('User', userSchema);

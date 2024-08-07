@@ -1,4 +1,18 @@
 /* Profile.css */
+html, body, #root, .profile-page {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-content {
+    flex: 1;
+}
 
 /* Container for the admin panel section */
 .admin-panel {
