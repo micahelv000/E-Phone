@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import { TableRow, TableCell, IconButton, Collapse, Box, Table, TableHead, TableBody, TextField, Button } from "@mui/material";
 import { KeyboardArrowDown as KeyboardArrowDownIcon, KeyboardArrowUp as KeyboardArrowUpIcon, Sync as SyncIcon } from "@mui/icons-material";
 import axios from "axios";
-import axiosInstance from "../../utils/axiosConfig";
+import { fetchData, handleInputChange, handleSync } from "../../utils/itemUtils";
 import PropTypes from "prop-types";
 
 function RowComponent(props) {
-  const { row } = props;
+  const { row, onDevicesFetched } = props;
   const [open, setOpen] = useState(false);
   const [devices, setDevices] = useState([]);
+  const [filteredDevices, setFilteredDevices] = useState([]);
   const [itemDetails, setItemDetails] = useState({});
   const [initialItemDetails, setInitialItemDetails] = useState({});
   const [isChanged, setIsChanged] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
   const handleExpandClick = () => {
     setOpen(!open);
@@ -21,6 +23,8 @@ function RowComponent(props) {
         .then((response) => {
           if (response.data.status) {
             setDevices(response.data.data.phones);
+            setFilteredDevices(response.data.data.phones);
+            onDevicesFetched(response.data.data.phones); // Notify parent component
           }
         })
         .catch((error) => {
@@ -30,80 +34,33 @@ function RowComponent(props) {
   };
 
   useEffect(() => {
-    devices.forEach((device) => {
-      axiosInstance
-        .get(`http://localhost:5000/item-details/${device.slug}`)
-        .then((response) => {
-          setItemDetails((prevState) => ({
-            ...prevState,
-            [device.slug]: response.data,
-          }));
-          setInitialItemDetails((prevState) => ({
-            ...prevState,
-            [device.slug]: response.data,
-          }));
-        })
-        .catch((error) => {
-          console.error("Error fetching item details:", error);
-        });
+    devices.forEach(async (device) => {
+      const data = await fetchData(`http://localhost:5000/item-details/${device.slug}`);
+      if (data) {
+        setItemDetails((prevState) => ({
+          ...prevState,
+          [device.slug]: data,
+        }));
+        setInitialItemDetails((prevState) => ({
+          ...prevState,
+          [device.slug]: data,
+        }));
+      }
     });
   }, [devices]);
 
-  const handleInputChange = (slug, field, value) => {
-    if (value < 0) value = 0;
-    setItemDetails((prevState) => ({
-      ...prevState,
-      [slug]: {
-        ...prevState[slug],
-        [field]: value,
-      },
-    }));
-    setIsChanged(true);
+  const handleSearchChange = (event) => {
+    const text = event.target.value;
+    setSearchText(text);
+    filterDevices(text);
   };
 
-  const handleSync = () => {
-    devices.forEach((device) => {
-      const initialDetails = initialItemDetails[device.slug] || { stock: 0, price: 0 };
-      const currentDetails = itemDetails[device.slug] || { stock: 0, price: 0 };
-
-      if (initialDetails.stock !== currentDetails.stock || initialDetails.price !== currentDetails.price) {
-        axios
-          .get(`https://phone-specs-api.vercel.app/${device.slug}`)
-          .then((response) => {
-            const data = response.data.data;
-            const displaySpec = data.specifications.find((spec) => spec.title === "Display");
-            let screenSize = null;
-            if (displaySpec) {
-              const sizeSpec = displaySpec.specs.find((spec) => spec.key === "Size");
-              if (sizeSpec && Array.isArray(sizeSpec.val) && sizeSpec.val.length > 0) {
-                screenSize = sizeSpec.val[0].match(/\d+(\.\d+)?/)[0];
-              }
-            }
-
-            const updatedDetails = {
-              ...currentDetails,
-              brand: data.brand,
-              os: data.os,
-              image: data.thumbnail,
-              screenSize: screenSize,
-              phone_name: data.phone_name,
-            };
-
-            axiosInstance
-              .put(`http://localhost:5000/update-item/${device.slug}`, updatedDetails)
-              .then((response) => {
-                console.log("Item updated:", response.data);
-              })
-              .catch((error) => {
-                console.error("Error updating item:", error);
-              });
-          })
-          .catch((error) => {
-            console.error("Error fetching additional device details:", error);
-          });
-      }
-    });
-    setIsChanged(false);
+  const filterDevices = (text) => {
+    if (text) {
+      setFilteredDevices(devices.filter(device => device.phone_name.toLowerCase().includes(text.toLowerCase())));
+    } else {
+      setFilteredDevices(devices);
+    }
   };
 
   return (
@@ -123,6 +80,13 @@ function RowComponent(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
+              <TextField
+                label="Search Devices"
+                value={searchText}
+                onChange={handleSearchChange}
+                fullWidth
+                margin="normal"
+              />
               <Table size="small" aria-label="devices">
                 <TableHead>
                   <TableRow>
@@ -134,7 +98,7 @@ function RowComponent(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {devices.map((device) => (
+                  {filteredDevices.map((device) => (
                     <TableRow key={device.slug}>
                       <TableCell component="th" scope="row">
                         {device.phone_name}
@@ -151,7 +115,7 @@ function RowComponent(props) {
                         <TextField
                           type="number"
                           value={itemDetails[device.slug]?.stock || 0}
-                          onChange={(e) => handleInputChange(device.slug, "stock", parseInt(e.target.value))}
+                          onChange={(e) => handleInputChange(device.slug, "stock", parseInt(e.target.value), setItemDetails, setIsChanged)}
                           style={{ width: "60px", display: "inline-block", margin: "0 10px" }}
                           inputProps={{ min: 0 }}
                         />
@@ -160,7 +124,7 @@ function RowComponent(props) {
                         <TextField
                           type="number"
                           value={itemDetails[device.slug]?.price || 0}
-                          onChange={(e) => handleInputChange(device.slug, "price", parseFloat(e.target.value))}
+                          onChange={(e) => handleInputChange(device.slug, "price", parseFloat(e.target.value), setItemDetails, setIsChanged)}
                           style={{ width: "100px" }}
                           inputProps={{ min: 0 }}
                         />
@@ -174,8 +138,8 @@ function RowComponent(props) {
                   variant="contained"
                   color="primary"
                   startIcon={<SyncIcon />}
-                  onClick={handleSync}
-                  style={{ position: "fixed", bottom: "80px", right: "20px" }} // Adjusted position
+                  onClick={() => handleSync(devices, itemDetails, initialItemDetails, setIsChanged)}
+                  style={{ position: "fixed", bottom: "80px", right: "20px" }}
                 >
                   Sync
                 </Button>
@@ -195,6 +159,7 @@ RowComponent.propTypes = {
     brand_slug: PropTypes.string.isRequired,
     device_count: PropTypes.number.isRequired,
   }).isRequired,
+  onDevicesFetched: PropTypes.func.isRequired,
 };
 
 export default RowComponent;

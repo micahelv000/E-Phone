@@ -54,8 +54,8 @@ export default function ManageItems() {
         <TabPanel value={value} index={1}>
           <AddNewStock />
         </TabPanel>
-        <Bottom style={{ paddingBottom: '80px' }} />
       </Container>
+      <Bottom />
     </div>
   );
 }

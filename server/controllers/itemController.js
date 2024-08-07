@@ -41,3 +41,13 @@ exports.getItems = async (req, res) => {
     res.status(500).send("Error fetching items");
   }
 };
+
+exports.deleteItem = async (req, res) => {
+  const { slug } = req.params;
+  try {
+    await Item.findOneAndDelete({ slug });
+    res.status(200).send({ message: "Item deleted successfully" });
+  } catch (error) {
+    res.status(500).send("Error deleting item");
+  }
+};
