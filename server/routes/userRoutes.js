@@ -22,5 +22,6 @@ router.put('/update-user', authenticateToken, updateUser);
 router.put('/update-password', authenticateToken, updatePassword);
 router.get('/users', authenticateToken, isAdmin, getUsers);
 router.put('/users/:id', authenticateToken, isAdmin, updateUserById);
+router.delete('/users/:id', authenticateToken, isAdmin, deleteUser);
 
 module.exports = router;

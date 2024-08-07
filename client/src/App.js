@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import NoPage from './pages/NoPage';
-import AddItem from './pages/Items/ManageItems';
+import AddItem from './pages/Admin/ManageItems';
 import AdminAnalytics from './pages/Admin/Analytics';
 import AdminUsers from './pages/Admin/Users';
 import Cart from './pages/Cart';
