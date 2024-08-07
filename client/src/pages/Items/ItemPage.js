@@ -7,6 +7,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { Button, Container } from 'react-bootstrap';
 import CircularProgress from '@mui/material/CircularProgress';
 import BottomLongPages from '../../components/layout/BottomLongPages';
+import axios from 'axios';
 
 export default function ItemPage() {
   const location = useLocation();
@@ -14,6 +15,7 @@ export default function ItemPage() {
   const [itemData, setItemData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [videoUrl, setVideoUrl] = useState('');
   const { addToCart } = useContext(CartContext);
 
   const queryParams = new URLSearchParams(location.search);
@@ -45,6 +47,7 @@ export default function ItemPage() {
           .then(data => {
             if (data.status && data.data) {
               setItemData(data.data);
+              fetchYouTubeVideo(data.data.phone_name);
             } else {
               throw new Error('No phone data found');
             }
@@ -60,6 +63,16 @@ export default function ItemPage() {
     }
   }, [slug]);
 
+  const fetchYouTubeVideo = (phoneName) => {
+    axios.get(`http://localhost:5000/youtube-video?phoneName=${phoneName}`)
+        .then(response => {
+          setVideoUrl(response.data.videoUrl);
+        })
+        .catch(error => {
+          console.error('Error fetching YouTube video:', error);
+        });
+  };
+
   if (loading) {
     return <div><Header/><center><CircularProgress size={300} /></center></div>;
   }
@@ -73,7 +86,20 @@ export default function ItemPage() {
         <Header />
         <Container>
           <Card>
-            <Card.Img variant="top" style={{ height: '80%', width: '300px', objectFit: 'cover' }} src={itemData.thumbnail} />
+            <table style={{ width: '100%' }}>
+              <tbody>
+                <tr>
+                  <td style={{ width: '40%' }}>
+                    <Card.Img variant="top" style={{ height: '80%', width: '300px', objectFit: 'cover' }} src={itemData.thumbnail} />
+                  </td>
+                  <td style={{ width: '60%' }}>
+                    {videoUrl && (
+                      <iframe width="560" height="315" src={videoUrl} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
             <Card.Body>
               <Card.Title>{itemData.phone_name}</Card.Title>
               <Card.Text>
