@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const TransactionSchema = new mongoose.Schema({
     UserId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
+    username: { type: String, required: true },  // Added username field
     Items: [{
         ItemSlug: { type: String, required: true },
         ItemName: { type: String, required: true },

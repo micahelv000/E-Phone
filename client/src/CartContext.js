@@ -8,7 +8,6 @@ export const CartProvider = ({ children }) => {
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
-
   const addToCart = (item) => {
     setCart((prevCart) => {
       const existingItemIndex = prevCart.findIndex(cartItem => cartItem.slug === item.slug);
@@ -16,9 +15,9 @@ export const CartProvider = ({ children }) => {
       let newCart;
       if (existingItemIndex >= 0) {
         newCart = prevCart.map((cartItem, index) =>
-            index === existingItemIndex
-                ? { ...cartItem, quantity: cartItem.quantity + Number(item.quantity) }
-                : cartItem
+          index === existingItemIndex
+            ? { ...cartItem, quantity: cartItem.quantity + Number(item.quantity) }
+            : cartItem
         );
       } else {
         newCart = [...prevCart, { ...item, quantity: Number(item.quantity), price: Number(item.price) }];
@@ -28,7 +27,6 @@ export const CartProvider = ({ children }) => {
       return newCart;
     });
   };
-  
 
   const removeFromCart = (slug) => {
     setCart((prevCart) => {
@@ -46,7 +44,7 @@ export const CartProvider = ({ children }) => {
   const updateQuantity = (slug, quantity) => {
     setCart((prevCart) => {
       const newCart = prevCart.map(item =>
-        item.slug === slug ? { ...item, quantity } : item
+        item.slug === slug ? { ...item, quantity: Number(quantity) } : item
       );
       localStorage.setItem('cart', JSON.stringify(newCart));
       return newCart;
@@ -58,7 +56,7 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity,clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart }}>
       {children}
     </CartContext.Provider>
   );

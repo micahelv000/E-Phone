@@ -79,11 +79,14 @@ export default function Profile() {
                                         <Button href="admin/users">Users Management</Button>
                                     </Grid>
                                     <Grid container xs={16} columns={12}>
-                                        <Grid xs={6}>
+                                        <Grid xs={4}>
                                             <Button href="admin/add-item">Stock Management</Button>
                                         </Grid>
-                                        <Grid xs={6}>
+                                        <Grid xs={4}>
                                             <Button href="admin/analytics">Analytics</Button>
+                                        </Grid>
+                                        <Grid xs={4}>
+                                            <Button href="admin/Transactions">Transactions</Button>
                                         </Grid>
                                     </Grid>
                                 </Grid>

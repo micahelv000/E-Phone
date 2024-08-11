@@ -5,10 +5,12 @@ const Transaction = require('../models/Transaction');
 exports.createTransaction = async (req, res) => {
     try {
         const userId = req.user._id;
+        const username = req.user.username;  // Assuming username is available in the user object
 
         const { Items, TotalPrice, TotalQuantity, OrderDate } = req.body;
         const newTransaction = new Transaction({
             UserId: userId,
+            username: username,  // Include username
             Items,
             TotalPrice,
             TotalQuantity,
@@ -21,6 +23,20 @@ exports.createTransaction = async (req, res) => {
     }
 };
 
+// Get all transactions
+exports.getAdminAllTransactions = async (req, res) => {
+    try {
+        // Check if the user is an admin
+        if (!req.user.isAdmin) {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+
+        const transactions = await Transaction.find(); // Fetch all transactions
+        res.status(200).json(transactions);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 // Get all transactions
 exports.getAllTransactions = async (req, res) => {
     try {
@@ -42,6 +58,7 @@ exports.getTransactionById = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 // Update a transaction by ID
 exports.updateTransactionById = async (req, res) => {

@@ -7,7 +7,10 @@
     "server"
   ],
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "chart.js": "^4.4.3",
+    "concurrently": "^8.2.2",
+    "react-chartjs-2": "^5.2.0",
+    "react-table": "^7.8.0"
   },
   "scripts": {
     "start": "concurrently \"npm start --workspace=client\" \"npm start --workspace=server\"",

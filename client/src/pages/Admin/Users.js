@@ -3,13 +3,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from '../../components/layout/Header.js';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-import { Container, Button, ButtonGroup } from 'react-bootstrap';
+import { Container, Button, ButtonGroup, FormControl, InputGroup } from 'react-bootstrap';
 import axiosInstance from '../../utils/axiosConfig';
 import BottomLongPages from '../../components/layout/BottomLongPages';
 
 export default function Users() {
   const [rows, setRows] = useState([]);
+  const [filteredRows, setFilteredRows] = useState([]);
   const [editedRows, setEditedRows] = useState(new Set());
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
   const handleDelete = async (id) => {
     try {
@@ -147,6 +149,7 @@ export default function Users() {
           ...user
         }));
         setRows(users);
+        setFilteredRows(users); // Initialize filteredRows with all users
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -155,14 +158,35 @@ export default function Users() {
     fetchUsers();
   }, []);
 
+  useEffect(() => {
+    const filtered = rows.filter(row =>
+      row.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.phoneNumber.includes(searchQuery)
+    );
+    setFilteredRows(filtered);
+  }, [searchQuery, rows]);
+
   return (
     <div>
       <Header/>
       <Container>
-        <center><h1>Admin page for edit users details</h1></center>
+        <center><h1>Admin page for editing user details</h1></center>
+        <InputGroup className="mb-3">
+          <FormControl
+            placeholder="Search..."
+            aria-label="Search"
+            aria-describedby="basic-addon2"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </InputGroup>
         <Box sx={{ height: '80vh', width: '100%' }}>
           <DataGrid
-            rows={rows}
+            rows={filteredRows}
             columns={columns}
             initialState={{
               pagination: {

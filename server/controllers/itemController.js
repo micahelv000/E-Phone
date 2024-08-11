@@ -51,3 +51,32 @@ exports.deleteItem = async (req, res) => {
     res.status(500).send("Error deleting item");
   }
 };
+
+// Update stock for a specific item
+exports.updateStock = async (req, res) => {
+  const { slug } = req.params;
+  const { quantity } = req.body;
+
+  try {
+    // Find the item by slug
+    const item = await Item.findOne({ slug });
+    if (!item) {
+      return res.status(404).send({ message: 'Item not found' });
+    }
+
+    // Check if the item has enough stock
+    if (item.stock < quantity) {
+      return res.status(400).send({ message: 'Not enough stock available' });
+    }
+
+    // Reduce the stock by the quantity purchased
+    item.stock -= quantity;
+
+    // Save updated item
+    await item.save();
+
+    res.status(200).send(item);
+  } catch (error) {
+    res.status(500).send("Error updating item stock");
+  }
+};

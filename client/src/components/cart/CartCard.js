@@ -16,7 +16,7 @@ export default function CartCard({ item, onRemove, onQuantityChange }) {
       setQuantity(item.quantity);
     } else {
       setQuantity(newQuantity);
-      onQuantityChange(item.slug, newQuantity); // Pass the slug here
+      onQuantityChange(item.slug, newQuantity);
     }
   };
 
