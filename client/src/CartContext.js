@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, {createContext, useCallback, useEffect, useState} from 'react';
 
 export const CartContext = createContext();
 
@@ -8,56 +8,50 @@ export const CartProvider = ({ children }) => {
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  const addToCart = (item) => {
+  const addToCart = useCallback((item) => {
     setCart((prevCart) => {
       const existingItemIndex = prevCart.findIndex(cartItem => cartItem.slug === item.slug);
 
       let newCart;
       if (existingItemIndex >= 0) {
         newCart = prevCart.map((cartItem, index) =>
-          index === existingItemIndex
-            ? { ...cartItem, quantity: cartItem.quantity + Number(item.quantity) }
-            : cartItem
+            index === existingItemIndex
+                ? { ...cartItem, quantity: cartItem.quantity + Number(item.quantity) }
+                : cartItem
         );
       } else {
         newCart = [...prevCart, { ...item, quantity: Number(item.quantity), price: Number(item.price) }];
       }
 
-      localStorage.setItem('cart', JSON.stringify(newCart));
       return newCart;
     });
-  };
+  }, []);
 
-  const removeFromCart = (slug) => {
+  const removeFromCart = useCallback((slug) => {
     setCart((prevCart) => {
-      const newCart = prevCart.filter(cartItem => cartItem.slug !== slug);
-      localStorage.setItem('cart', JSON.stringify(newCart));
-      return newCart;
+      return prevCart.filter(cartItem => cartItem.slug !== slug);
     });
-  };
+  }, []);
 
-  const clearCart = () => {
-    setCart([]);
-    localStorage.removeItem('cart');
-  };
-
-  const updateQuantity = (slug, quantity) => {
+  const updateQuantity = useCallback((slug, quantity) => {
     setCart((prevCart) => {
-      const newCart = prevCart.map(item =>
-        item.slug === slug ? { ...item, quantity: Number(quantity) } : item
+      return prevCart.map(item =>
+          item.slug === slug ? {...item, quantity: Number(quantity)} : item
       );
-      localStorage.setItem('cart', JSON.stringify(newCart));
-      return newCart;
     });
-  };
+  }, []);
+
+  const clearCart = useCallback(() => {
+    setCart([]);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart }}>
-      {children}
-    </CartContext.Provider>
+      <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart }}>
+        {children}
+      </CartContext.Provider>
   );
 };

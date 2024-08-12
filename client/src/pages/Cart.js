@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../CartContext';
 import Header from '../components/layout/Header';
@@ -9,9 +9,6 @@ import axiosInstance from "../utils/axiosConfig";
 
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, clearCart } = useContext(CartContext);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [numberOfItems, setNumberOfItems] = useState(0);
-  const [totalPriceString, setTotalPriceString] = useState('');
   const token = localStorage.getItem('authToken');
   const navigate = useNavigate();
 
@@ -20,62 +17,13 @@ export default function Cart() {
   };
 
   const handleQuantityChange = (slug, newQuantity) => {
-    const numQuantity = Number(newQuantity); 
-    if (!isNaN(numQuantity) && numQuantity > 0) { 
+    const numQuantity = Number(newQuantity);
+    if (!isNaN(numQuantity) && numQuantity > 0) {
       updateQuantity(slug, numQuantity);
     }
   };
 
-  const handleCheckout = async () => {
-    const sanitizedCart = cart.map(item => ({
-      ItemSlug: item.slug,
-      ItemName: item.phone_name,
-      Quantity: Number(item.quantity),
-      Price: Number(item.price)
-    }));
-  
-    const totalPrice = sanitizedCart.reduce((sum, item) => sum + item.Price * item.Quantity, 0);
-    const totalQuantity = sanitizedCart.reduce((count, item) => count + item.Quantity, 0);
-  
-    const transaction = {
-      Items: sanitizedCart,
-      TotalPrice: totalPrice,
-      TotalQuantity: totalQuantity,
-      OrderDate: new Date()
-    };
-  
-    try {
-      // First create the transaction
-      const response = await axiosInstance.post('http://localhost:5000/create-transaction', transaction, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-  
-      // Then update the stock for each item
-      await Promise.all(sanitizedCart.map(item => 
-        axiosInstance.put(`http://localhost:5000/update-stock/${item.ItemSlug}`, {
-          quantity: item.Quantity
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-      ));
-  
-      console.log('Transaction successful:', response.data);
-      clearCart();
-      alert('Transaction successful!');
-  
-      navigate(`/transactionDetails/${response.data._id}`);
-    } catch (error) {
-      console.error('Transaction failed:', error);
-      alert('Transaction failed, please try again.');
-    }
-  };
-  
-
-  useEffect(() => {
+  const {totalPriceString } = useMemo(() => {
     const newTotalPrice = cart.reduce((sum, item) => {
       const itemPrice = parseFloat(item.price);
       const itemQuantity = parseInt(item.quantity, 10);
@@ -87,49 +35,98 @@ export default function Cart() {
       return count + (isNaN(itemQuantity) ? 0 : itemQuantity);
     }, 0);
 
-    setTotalPrice(newTotalPrice);
-    setNumberOfItems(newNumberOfItems);
-    setTotalPriceString(`Total price: ${newTotalPrice.toFixed(2)} for ${newNumberOfItems} ${newNumberOfItems === 1 ? 'item' : 'items'}`);
+    return {
+      totalPrice: newTotalPrice,
+      numberOfItems: newNumberOfItems,
+      totalPriceString: `Total price: ${newTotalPrice.toFixed(2)} for ${newNumberOfItems} ${newNumberOfItems === 1 ? 'item' : 'items'}`
+    };
   }, [cart]);
 
+  const handleCheckout = async () => {
+    const sanitizedCart = cart.map(item => ({
+      ItemSlug: item.slug,
+      ItemName: item.phone_name,
+      Quantity: Number(item.quantity),
+      Price: Number(item.price)
+    }));
+
+    const totalPrice = sanitizedCart.reduce((sum, item) => sum + item.Price * item.Quantity, 0);
+    const totalQuantity = sanitizedCart.reduce((count, item) => count + item.Quantity, 0);
+
+    const transaction = {
+      Items: sanitizedCart,
+      TotalPrice: totalPrice,
+      TotalQuantity: totalQuantity,
+      OrderDate: new Date()
+    };
+
+    try {
+      // First create the transaction
+      const response = await axiosInstance.post('http://localhost:5000/create-transaction', transaction, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      // Then update the stock for each item
+      await Promise.all(sanitizedCart.map(item =>
+        axiosInstance.put(`http://localhost:5000/update-stock/${item.ItemSlug}`, {
+          quantity: item.Quantity
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+      ));
+
+      clearCart();
+      alert('Transaction successful!');
+
+      navigate(`/transactionDetails/${response.data._id}`);
+    } catch (error) {
+      console.error('Transaction failed:', error);
+      alert('Transaction failed, please try again.');
+    }
+  };
+
   return (
-    <div>
-      <Header />
-      <Container>
-        <div className="shopping-cart">
-          {cart.length === 0 ? (
-            <center>
-              <div>
-                <h2>No items in the cart.</h2>
-                <p>
-                  Please select items that you wish to purchase from the home page and then return here. <br />
-                  Take a look at our monkey:
-                </p>
-                <img src='https://news.gsu.edu/files/2019/10/monkey-800x600.jpg' alt='Monkey' />
-              </div>
-            </center>
-          ) : (
-            <>
-              {cart.map(item => (
-                <div key={item.slug}>
-                  <CartCard
-                    item={item}
-                    onRemove={() => handleRemove(item.slug)}
-                    onQuantityChange={(newQuantity) => handleQuantityChange(item.slug, newQuantity)}
-                  />
-                </div>
-              ))}
-              <center>
-                <Card className="total-price" style={{ padding: '10px', marginTop: '10px', fontSize: '18px' }}>
-                  <h3>{totalPriceString}</h3>
-                </Card>
-                <Button onClick={handleCheckout} style={{ marginTop: '10px', marginBottom: '90px' }}>Checkout</Button>
-              </center>
-            </>
-          )}
-        </div>
-      </Container>
-      <Bottom style={{ paddingBottom: '0px' }} />
-    </div>
+      <div>
+        <Header />
+        <Container>
+          <div className="shopping-cart">
+            {cart.length === 0 ? (
+                <center>
+                  <div>
+                    <h2>No items in the cart.</h2>
+                    <p>
+                      Please select items that you wish to purchase from the home page and then return here. <br />
+                      Take a look at our monkey:
+                    </p>
+                    <img src='https://news.gsu.edu/files/2019/10/monkey-800x600.jpg' alt='Monkey' />
+                  </div>
+                </center>
+            ) : (
+                <>
+                  {cart.map(item => (
+                      <div key={item.slug}>
+                        <CartCard
+                            item={item}
+                            onRemove={() => handleRemove(item.slug)}
+                            onQuantityChange={(newQuantity) => handleQuantityChange(item.slug, newQuantity)}
+                        />
+                      </div>
+                  ))}
+                  <center>
+                    <Card className="total-price" style={{ padding: '10px', marginTop: '10px', fontSize: '18px' }}>
+                      <h3>{totalPriceString}</h3>
+                    </Card>
+                    <Button onClick={handleCheckout} style={{ marginTop: '10px', marginBottom: '90px' }}>Checkout</Button>
+                  </center>
+                </>
+            )}
+          </div>
+        </Container>
+        <Bottom style={{ paddingBottom: '0px' }} />
+      </div>
   );
 }
