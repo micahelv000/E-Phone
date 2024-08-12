@@ -70,13 +70,13 @@ export default function Cart() {
 
       // Then update the stock for each item
       await Promise.all(sanitizedCart.map(item =>
-        axiosInstance.put(`http://localhost:5000/update-stock/${item.ItemSlug}`, {
-          quantity: item.Quantity
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
+          axiosInstance.put(`http://localhost:5000/update-stock/${item.ItemSlug}`, {
+            quantity: item.Quantity
+          }, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
       ));
 
       clearCart();
@@ -90,9 +90,9 @@ export default function Cart() {
   };
 
   return (
-      <div>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Header />
-        <Container>
+        <Container style={{ flex: '1' }}>
           <div className="shopping-cart">
             {cart.length === 0 ? (
                 <center>
@@ -126,7 +126,7 @@ export default function Cart() {
             )}
           </div>
         </Container>
-        <Bottom style={{ paddingBottom: '0px' }} />
+        <Bottom />
       </div>
   );
 }
