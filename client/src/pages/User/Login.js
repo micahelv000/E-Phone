@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Header from '../../components/layout/Header';
-import { Container } from 'react-bootstrap';
+import { Container, Card, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -35,54 +35,57 @@ function Login() {
   };
 
   return (
-    <div>
-      <Header />
+      <div className="login-page">
+        <Header />
 
-      <br />
+        <Container className="login-container">
+          <Card className="login-card">
+            <Card.Body>
+              <Card.Title className="text-center login-card-title">Login</Card.Title>
+              <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="formBasicUsername">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control type="text" placeholder="Enter your username" />
+                </Form.Group>
+                <br />
 
-      <Container>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="formBasicUsername">
-            <Form.Label>Username</Form.Label>
-            <Form.Control type="text" placeholder="Enter your username" />
-          </Form.Group>
-          <br />
+                <Form.Group controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <div className="login-password-wrapper">
+                    <Form.Control
+                        type={passwordVisible ? 'text' : 'password'}
+                        placeholder="Enter your password"
+                    />
+                    <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="btn btn-outline-secondary login-password-toggle"
+                    >
+                      {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+                </Form.Group>
+                <br />
 
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <div className="password-wrapper">
-              <Form.Control
-                type={passwordVisible ? 'text' : 'password'}
-                placeholder="Enter your password"
-              />
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="btn btn-outline-secondary password-toggle"
-              >
-                {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-              </button>
-            </div>
-            <Form.Text className="text-muted"></Form.Text>
-          </Form.Group>
+                <Form.Group controlId="formBasicCheckbox">
+                  <Form.Check type="checkbox" label="Remember me" />
+                </Form.Group>
 
-          <Form.Group controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Remember me" />
-          </Form.Group>
+                {errorMessage && <div className="text-danger mt-3">{errorMessage}</div>}
 
-          {errorMessage && <div className="text-danger mt-3">{errorMessage}</div>}
+                <Button variant="primary" type="submit" className="w-100 mt-3 login-btn-primary">
+                  Login
+                </Button>
 
-          <div className="mt-3">
-            <Link to="/register">Don't have an account? Register here</Link>
-          </div>
-
-          <Form.Group controlId="formBasicSubmit">
-            <Form.Control type="submit" value="Login" className="btn btn-primary" />
-          </Form.Group>
-        </Form>
-      </Container>
-      <Bottom style={{ paddingBottom: '0px' }} />
-    </div>
+                <div className="mt-3 text-center">
+                  <Link to="/register">Don't have an account? Register here</Link>
+                </div>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Container>
+        <Bottom style={{ paddingBottom: '0px' }} />
+      </div>
   );
 }
 

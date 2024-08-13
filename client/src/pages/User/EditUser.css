@@ -1,0 +1,88 @@
+.edit-user-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  font-family: 'Arial', sans-serif;
+}
+
+.edit-user-container {
+  flex: 1;
+  padding: 40px;
+  max-width: 1350px;
+  margin: auto;
+}
+
+.edit-user-form {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.edit-user-form h1 {
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #333333;
+}
+
+.edit-user-form .form-group {
+  margin-bottom: 20px;
+}
+
+.edit-user-form .form-control {
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.edit-user-form .btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.edit-user-form .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.edit-user-form .btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+.edit-user-form .form-label {
+  font-weight: bold;
+  color: #555555;
+}
+
+.edit-user-form .form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.edit-user-form .form-text {
+  color: #6c757d;
+}
+
+.edit-user-form .form-feedback {
+  color: #dc3545;
+}
+
+.profile-picture-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-picture-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}

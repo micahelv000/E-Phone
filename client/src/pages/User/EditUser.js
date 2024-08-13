@@ -9,6 +9,8 @@ import { Container } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Bottom from '../../components/layout/Bottom';
+import { FaUser, FaCity, FaPhone, FaImage, FaLock } from 'react-icons/fa';
+import './EditUser.css';
 
 function EditUser() {
   const navigate = useNavigate();
@@ -23,8 +25,8 @@ function EditUser() {
   });
   const [password, setPassword] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePictureUrl, setProfilePictureUrl] = useState(null);
 
-  // Check if user is logged in before allowing access to the page
   const isLoggedIn = () => {
     return Boolean(localStorage.getItem('authToken'));
   };
@@ -33,7 +35,6 @@ function EditUser() {
     if (!isLoggedIn()) {
       navigate('/NoPage');
     } else {
-      // Fetch user details from the server
       const fetchUserDetails = async () => {
         try {
           const response = await axios.get('http://localhost:5000/user-details', {
@@ -50,9 +51,10 @@ function EditUser() {
             city: response.data.city,
             phoneNumber: response.data.phoneNumber
           });
+
+          setProfilePictureUrl(`http://localhost:5000/user-profile-picture/${response.data._id}?cb=${new Date().getTime()}`);
         } catch (error) {
           console.error(error);
-          // Handle error, e.g., navigate to login page if the token is invalid
         }
       };
       fetchUserDetails();
@@ -86,14 +88,15 @@ function EditUser() {
         navigate('/home');
       } catch (error) {
         console.error(error);
-        // Handle error
       }
     }
     setUserDetailsValidated(true);
   };
 
   const handleFileChange = (event) => {
-    setProfilePicture(event.target.files[0]);
+    const file = event.target.files[0];
+    setProfilePicture(file);
+    setProfilePictureUrl(URL.createObjectURL(file));
   };
 
   const handleSubmitPassword = async (event) => {
@@ -116,7 +119,6 @@ function EditUser() {
         navigate('/home');
       } catch (error) {
         console.error(error);
-        // Handle error
       }
     }
     setPasswordValidated(true);
@@ -135,124 +137,133 @@ function EditUser() {
   };
 
   return (
-      <>
-        <Header />
+    <div className="edit-user-page">
+      <Header />
+      <Container className="edit-user-container">
+        <center><h1>Edit Details Page</h1></center>
 
-        <Container>
-          <center><h1>Edit Details Page</h1></center>
+        <Form noValidate validated={userDetailsValidated} onSubmit={handleSubmit} className="edit-user-form">
+          <Row className="mb-3 justify-content-center">
+            <Form.Group as={Col} md="6" controlId="profilePicture" className="text-center">
+              <FaImage className="form-icon" />
+              <Form.Label>Profile Picture</Form.Label>
+              {profilePictureUrl && (
+                <div className="profile-picture-preview">
+                  <img src={profilePictureUrl} alt="Profile Preview" className="profile-picture-img" />
+                </div>
+              )}
+              <Form.Control
+                type="file"
+                onChange={handleFileChange}
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="4" controlId="firstName">
+              <FaUser className="form-icon" />
+              <Form.Label>First name</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                placeholder="First name"
+                value={userDetails.firstName}
+                onChange={handleInputChange}
+              />
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} md="4" controlId="lastName">
+              <FaUser className="form-icon" />
+              <Form.Label>Last name</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                placeholder="Last name"
+                value={userDetails.lastName}
+                onChange={handleInputChange}
+              />
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} md="4" controlId="username">
+              <FaUser className="form-icon" />
+              <Form.Label>Username</Form.Label>
+              <InputGroup hasValidation>
+                <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+                <Form.Control
+                  type="text"
+                  placeholder="Username"
+                  aria-describedby="inputGroupPrepend"
+                  required
+                  value={userDetails.username}
+                  onChange={handleInputChange}
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please choose a username.
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="6" controlId="city">
+              <FaCity className="form-icon" />
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="City"
+                required
+                value={userDetails.city}
+                onChange={handleInputChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                Please provide a valid city.
+              </Form.Control.Feedback>
+            </Form.Group>
 
-          <Form noValidate validated={userDetailsValidated} onSubmit={handleSubmit}>
+            <Form.Group as={Col} md="6" controlId="phoneNumber">
+              <FaPhone className="form-icon" />
+              <Form.Label>Phone Number</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Phone Number"
+                required
+                value={userDetails.phoneNumber}
+                onChange={handleInputChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                Please provide a Phone Number.
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <center><Button type="submit" className="btn btn-primary">Change user details</Button></center>
+        </Form>
+        <br /><br />
+
+        <center>
+          <Form noValidate validated={passwordValidated} onSubmit={handleSubmitPassword} className="edit-user-form">
             <Row className="mb-3">
-              <Form.Group as={Col} md="4" controlId="firstName">
-                <Form.Label>First name</Form.Label>
-                <Form.Control
-                    required
-                    type="text"
-                    placeholder="First name"
-                    value={userDetails.firstName}
-                    onChange={handleInputChange}
-                />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group as={Col} md="4" controlId="lastName">
-                <Form.Label>Last name</Form.Label>
-                <Form.Control
-                    required
-                    type="text"
-                    placeholder="Last name"
-                    value={userDetails.lastName}
-                    onChange={handleInputChange}
-                />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group as={Col} md="4" controlId="username">
-                <Form.Label>Username</Form.Label>
-                <InputGroup hasValidation>
-                  <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+              <center>
+                <Form.Group as={Col} md="4" controlId="password">
+                  <FaLock className="form-icon" />
+                  <Form.Label>Password</Form.Label>
                   <Form.Control
-                      type="text"
-                      placeholder="Username"
-                      aria-describedby="inputGroupPrepend"
-                      required
-                      value={userDetails.username}
-                      onChange={handleInputChange}
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    required
+                    onChange={handlePasswordChange}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Please choose a username.
+                    Please provide a valid password.
                   </Form.Control.Feedback>
-                </InputGroup>
-              </Form.Group>
+                </Form.Group>
+              </center>
             </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="city">
-                <Form.Label>City</Form.Label>
-                <Form.Control
-                    type="text"
-                    placeholder="City"
-                    required
-                    value={userDetails.city}
-                    onChange={handleInputChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Please provide a valid city.
-                </Form.Control.Feedback>
-              </Form.Group>
 
-              <Form.Group as={Col} md="6" controlId="phoneNumber">
-                <Form.Label>Phone Number</Form.Label>
-                <Form.Control
-                    type="text"
-                    placeholder="Phone Number"
-                    required
-                    value={userDetails.phoneNumber}
-                    onChange={handleInputChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Please provide a Phone Number.
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="profilePicture">
-                <Form.Label>Profile Picture</Form.Label>
-                <Form.Control
-                    type="file"
-                    onChange={handleFileChange}
-                />
-              </Form.Group>
-            </Row>
-            <center><Button type="submit">Change user details</Button></center>
+            <center><Button type="submit" className="btn btn-primary">Change Password</Button></center>
           </Form>
-          <br /><br />
-
-          <center>
-
-            <Form noValidate validated={passwordValidated} onSubmit={handleSubmitPassword}>
-              <Row className="mb-3">
-                <center>
-                  <Form.Group as={Col} md="4" controlId="password">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        required
-                        onChange={handlePasswordChange}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      Please provide a valid password.
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </center>
-              </Row>
-
-              <center><Button type="submit">Change Password</Button></center>
-            </Form>
-          </center>
-        </Container>
-        <Bottom style={{ paddingBottom: '0px' }} />
-
-      </>
+        </center>
+      </Container>
+      <Bottom style={{ paddingBottom: '0px' }} />
+    </div>
   );
 }
 

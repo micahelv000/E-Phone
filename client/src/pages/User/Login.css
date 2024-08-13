@@ -1,18 +1,56 @@
-.password-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.password-wrapper .form-control {
-  padding-right: 2.5rem;
-}
-
-.password-toggle {
+.login-password-toggle {
   position: absolute;
   right: 0.5rem;
   background: none;
   border: none;
   cursor: pointer;
   outline: none;
+}
+
+.login-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-password-wrapper .form-control {
+  padding-right: 2.5rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 800px;
+  padding: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  min-height: 500px;
+}
+
+.login-card-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.login-btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.login-btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.login-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
