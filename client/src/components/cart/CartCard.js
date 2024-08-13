@@ -30,7 +30,7 @@ export default function CartCard({ item, onRemove, onQuantityChange }) {
           <div style={{ flex: 2 }}>
             <Card.Img
                 variant="top"
-                src={item.thumbnail || 'default-image-url'}
+                src={item.thumbnail || item.image || 'default-image-url'}
                 alt={item.phone_name}
                 style={{ height: '30%', width: '30%' }}
             />
