@@ -64,7 +64,7 @@ export default function Search({ searchText, onSearchTextChange, onFilterChange,
   };
 
   return (
-    <Container style={{ maxWidth: '80%' }}>
+    <Container style={{ maxWidth: '100%' }}>
       <Grid container spacing={1} wrap="nowrap">
         <Grid item xs={4}>
           <input
@@ -158,7 +158,7 @@ export default function Search({ searchText, onSearchTextChange, onFilterChange,
           </FormControl>
         </Grid>
 
-        <Grid item xs={2} sx={{ m: 1 }}>
+        <Grid item xs={3} sx={{ m: 2 }}>
           <Slider
               getAriaLabel={() => 'Price range'}
               value={priceRange}

@@ -174,7 +174,7 @@ export default function Users() {
     <div>
       <Header/>
       <Container>
-        <center><h1>Admin page for editing user details</h1></center>
+        <h1>Users Details</h1>
         <InputGroup className="mb-3">
           <FormControl
             placeholder="Search..."

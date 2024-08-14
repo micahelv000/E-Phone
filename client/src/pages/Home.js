@@ -141,6 +141,7 @@ export default function Home() {
 
             <Gallery />
             <Search
+                class-name="search-bar"
                 searchText={searchText}
                 onSearchTextChange={handleSearchTextChange}
                 onFilterChange={handleFilterChange}
@@ -149,6 +150,7 @@ export default function Home() {
                 brands={brands}
                 screenSizes={screenSizes}
                 maxPrice={maxPrice}
+                
             />
             <br />
                 <Grid items={filteredItems} />

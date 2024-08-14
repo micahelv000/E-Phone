@@ -165,7 +165,7 @@ export default function Transactions() {
       <div>
         <Header/>
         <Container>
-          <center><h1>Admin page for editing transaction details</h1></center>
+          <h1>Transaction Details</h1>
           <InputGroup className="mb-3">
             <FormControl
               placeholder="Search..."
