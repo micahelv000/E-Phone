@@ -19,9 +19,9 @@ exports.updateItem = async (req, res) => {
   try {
     const options = { new: true };
     let item = await Item.findOneAndUpdate(
-        { slug },
-        { stock, price, brand, os, image, screenSize, phone_name },
-        options
+      { slug },
+      { stock, price, brand, os, image, screenSize, phone_name },
+      options
     );
     if (!item) {
       item = new Item({ slug, stock, price, brand, os, image, screenSize, phone_name });
@@ -78,5 +78,19 @@ exports.updateStock = async (req, res) => {
     res.status(200).send(item);
   } catch (error) {
     res.status(500).send("Error updating item stock");
+  }
+};
+
+// Check stock for a specific item
+exports.checkStock = async (req, res) => {
+  const { slug } = req.params;
+  try {
+    const item = await Item.findOne({ slug });
+    if (!item) {
+      return res.status(200).send({ stock: 0 });
+    }
+    res.status(200).send({ stock: item.stock });
+  } catch (error) {
+    res.status(500).send("Error checking item stock");
   }
 };

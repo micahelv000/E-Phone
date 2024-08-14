@@ -49,46 +49,65 @@ export default function Cart() {
       Quantity: Number(item.quantity),
       Price: Number(item.price)
     }));
-
+  
     const totalPrice = sanitizedCart.reduce((sum, item) => sum + item.Price * item.Quantity, 0);
     const totalQuantity = sanitizedCart.reduce((count, item) => count + item.Quantity, 0);
-
+  
     const transaction = {
       Items: sanitizedCart,
       TotalPrice: totalPrice,
       TotalQuantity: totalQuantity,
       OrderDate: new Date()
     };
-
+  
     try {
+      // Check stock for each item
+      const stockCheckPromises = sanitizedCart.map(item =>
+        axiosInstance.get(`http://localhost:5000/check-stock/${item.ItemSlug}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+      );
+  
+      const stockResponses = await Promise.all(stockCheckPromises);
+  
+      for (let i = 0; i < stockResponses.length; i++) {
+        const stock = stockResponses[i].data.stock;
+        if (sanitizedCart[i].Quantity > stock) {
+          alert(`Insufficient stock for ${sanitizedCart[i].ItemName}. Available quantity: ${stock}`);
+          return;
+        }
+      }
+  
       // First create the transaction
       const response = await axiosInstance.post('http://localhost:5000/create-transaction', transaction, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-
+  
       // Then update the stock for each item
       await Promise.all(sanitizedCart.map(item =>
-          axiosInstance.put(`http://localhost:5000/update-stock/${item.ItemSlug}`, {
-            quantity: item.Quantity
-          }, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
+        axiosInstance.put(`http://localhost:5000/update-stock/${item.ItemSlug}`, {
+          quantity: item.Quantity
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
       ));
-
+  
       clearCart();
       alert('Transaction successful!');
-
+  
       navigate(`/transactionDetails/${response.data._id}`);
     } catch (error) {
       console.error('Transaction failed:', error);
       alert('Transaction failed, please try again.');
     }
   };
-
+  
   return (
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Header />

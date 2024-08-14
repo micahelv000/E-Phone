@@ -6,7 +6,7 @@ const connectDB = require("./config/db");
 
 const userRoutes = require("./routes/userRoutes");
 const itemRoutes = require("./routes/itemRoutes");
-const transactionsRouters = require("./routes/TransactionRoutes");
+const transactionsRoutes = require("./routes/TransactionRoutes");
 const videoRoutes = require('./routes/videoRoutes');
 
 const app = express();
@@ -19,7 +19,7 @@ app.use(cors());
 
 app.use("/", userRoutes);
 app.use("/", itemRoutes);
-app.use("/", transactionsRouters);
+app.use("/", transactionsRoutes);
 app.use("/", videoRoutes);
 
 app.listen(port, () => {
