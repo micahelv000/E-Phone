@@ -1,4 +1,5 @@
 # E-Phone
+![Ephone f41779cdf446f6886d0a](https://github.com/user-attachments/assets/fc2eb840-5813-4627-a846-97979cae9e14)
 
 E-Phone is a smart e-commerce website dedicated to buying and selling phones. It offers a seamless and efficient platform for both customers and administrators. The platform integrates with external APIs to fetch the latest phones, ensuring that users have access to the newest models on the market.
 
