@@ -4,6 +4,7 @@ import Header from "../../components/layout/Header";
 import CurrentStock from "../../components/ManageItems/CurrentStock";
 import AddNewStock from "../../components/ManageItems/AddNewStock";
 import Bottom from '../../components/layout/Bottom';
+import BottomLongPages from "../../components/layout/BottomLongPages";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -55,7 +56,6 @@ export default function ManageItems() {
           <AddNewStock />
         </TabPanel>
       </Container>
-      <Bottom />
     </div>
   );
 }

@@ -31,7 +31,7 @@ export default function ProfileCard({ userData }) {
                 <div className="col">
                     {isLoading ? (
                         <div className="spinner-border" role="status">
-                            <span className="sr-only">Loading...</span>
+                            <span className="sr-only"></span>
                         </div>
                     ) : (
                         <img className="align-self-end mr-3" src={profilePictureUrl} alt="User Avatar"

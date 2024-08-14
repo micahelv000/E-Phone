@@ -135,8 +135,10 @@ export default function Home() {
     };
 
     return (
-        <div className="home-container">
+        <>
             <Header />
+            <Container>
+
             <Gallery />
             <Search
                 searchText={searchText}
@@ -149,10 +151,9 @@ export default function Home() {
                 maxPrice={maxPrice}
             />
             <br />
-            <Container>
                 <Grid items={filteredItems} />
             </Container>
             <BottomLongPages/>
-        </div>
+        </>
     );
 }

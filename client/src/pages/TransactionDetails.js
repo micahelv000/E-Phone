@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from '../components/layout/Header';
 import axiosInstance from "../utils/axiosConfig";
 import { Card } from 'react-bootstrap';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function TransactionDetails() {
     const { id } = useParams();
@@ -53,7 +54,7 @@ export default function TransactionDetails() {
         fetchTransaction();
     }, [id]);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <div><Header/><center><CircularProgress size={300} /></center></div>;
     if (error) return <p>Error: {error}</p>;
 
     return (

@@ -9,8 +9,7 @@ import { Container } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Bottom from '../../components/layout/Bottom';
-
-
+import './Register.css';  // Assuming your CSS file is named Register.css
 
 function Register() {
   const navigate = useNavigate();
@@ -49,85 +48,82 @@ function Register() {
 
   return (
     <>
-    <Header />
-
-    <Container>
-    <center><h1>Register page</h1></center>
- 
-    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-      <Row className="mb-3">
-        <Form.Group as={Col} md="4" controlId="validationCustom01">
-          <Form.Label>First name</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="First name"
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group as={Col} md="4" controlId="validationCustom02">
-          <Form.Label>Last name</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Last name"
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group as={Col} md="4" controlId="validationCustomUsername">
-          <Form.Label>Username</Form.Label>
-          <InputGroup hasValidation>
-            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-            <Form.Control
-              type="text"
-              placeholder="Username"
-              aria-describedby="inputGroupPrepend"
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              Please choose a username.
-            </Form.Control.Feedback>
-          </InputGroup>
-        </Form.Group>
-      </Row>
-      <Row className="mb-3">
-        <Form.Group as={Col} md="6" controlId="validationCustom03">
-          <Form.Label>City</Form.Label>
-          <Form.Control type="text" placeholder="City" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid city.
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Form.Group as={Col} md="3" controlId="validationCustom04">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="Password" placeholder="Password" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid Password.
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Form.Group as={Col} md="3" controlId="validationCustom05">
-          <Form.Label>Phone Number</Form.Label>
-          <Form.Control type="text" placeholder="Phone Number" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a Phone Number.
-          </Form.Control.Feedback>
-        </Form.Group>
-      </Row>
-      <Form.Group className="mb-3">
-        <Form.Check
-          required
-          label="Agree to terms and conditions"
-          feedback="You must agree before submitting."
-          feedbackType="invalid"
-        />
-      </Form.Group>
-      <center><Button type="submit">Submit form</Button></center>
-    </Form>
-    </Container>
-    <Bottom style={{ paddingBottom: '0px' }} />
-
+      <Header />
+      <div className="full-height-container">
+        <Container className="content">
+          <center><h1>Register page</h1></center>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Row className="mb-3">
+              <Form.Group as={Col} md="4" controlId="validationCustom01">
+                <Form.Label>First name</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="First name"
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group as={Col} md="4" controlId="validationCustom02">
+                <Form.Label>Last name</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="Last name"
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group as={Col} md="4" controlId="validationCustomUsername">
+                <Form.Label>Username</Form.Label>
+                <InputGroup hasValidation>
+                  <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+                  <Form.Control
+                    type="text"
+                    placeholder="Username"
+                    aria-describedby="inputGroupPrepend"
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Please choose a username.
+                  </Form.Control.Feedback>
+                </InputGroup>
+              </Form.Group>
+            </Row>
+            <Row className="mb-3">
+              <Form.Group as={Col} md="6" controlId="validationCustom03">
+                <Form.Label>City</Form.Label>
+                <Form.Control type="text" placeholder="City" required />
+                <Form.Control.Feedback type="invalid">
+                  Please provide a valid city.
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group as={Col} md="3" controlId="validationCustom04">
+                <Form.Label>Password</Form.Label>
+                <Form.Control type="Password" placeholder="Password" required />
+                <Form.Control.Feedback type="invalid">
+                  Please provide a valid Password.
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group as={Col} md="3" controlId="validationCustom05">
+                <Form.Label>Phone Number</Form.Label>
+                <Form.Control type="text" placeholder="Phone Number" required />
+                <Form.Control.Feedback type="invalid">
+                  Please provide a Phone Number.
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Row>
+            <Form.Group className="mb-3">
+              <Form.Check
+                required
+                label="Agree to terms and conditions"
+                feedback="You must agree before submitting."
+                feedbackType="invalid"
+              />
+            </Form.Group>
+            <center><Button type="submit">Submit form</Button></center>
+          </Form>
+        </Container>
+        <Bottom style={{ marginBottom: '0px' }} />
+      </div>
     </>
   );
 }

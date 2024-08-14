@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button, Select, MenuItem } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button, Select, MenuItem, CircularProgress, Box } from "@mui/material";
 import { fetchData, handleInputChange, handleSync } from "../../utils/itemUtils";
 import SyncIcon from "@mui/icons-material/Sync";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -14,9 +14,11 @@ function CurrentStock() {
   const [isChanged, setIsChanged] = useState(false);
   const [itemDetails, setItemDetails] = useState({});
   const [initialItemDetails, setInitialItemDetails] = useState({});
+  const [loading, setLoading] = useState(true); // State variable for loading
 
   useEffect(() => {
     const fetchItems = async () => {
+      setLoading(true);
       const data = await fetchData("http://localhost:5000/items");
       if (data) {
         setItems(data);
@@ -29,6 +31,7 @@ function CurrentStock() {
         setItemDetails(details);
         setInitialItemDetails(details);
       }
+      setLoading(false); // Set loading to false after data is fetched
     };
     fetchItems();
   }, []);
@@ -66,77 +69,85 @@ function CurrentStock() {
 
   return (
     <div>
-      <Select value={selectedBrand} onChange={handleBrandChange} displayEmpty>
-        <MenuItem value=""><em>Select Brand</em></MenuItem>
-        {brands.map((brand, index) => (
-          <MenuItem key={index} value={brand}>{brand}</MenuItem>
-        ))}
-      </Select>
-      <TextField
-        label="Search by Name"
-        value={searchText}
-        onChange={handleSearchChange}
-      />
-      <TableContainer component={Paper}>
-        <Table aria-label="current stock table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Device Name</TableCell>
-              <TableCell>Brand</TableCell>
-              <TableCell>Stock</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredItems.map((item) => (
-              <TableRow key={item.slug}>
-                <TableCell>{item.phone_name}</TableCell>
-                <TableCell>{item.brand}</TableCell>
-                <TableCell>
-                  <TextField
-                    type="number"
-                    value={itemDetails[item.slug]?.stock || 0}
-                    onChange={(e) => handleInputChange(item.slug, "stock", parseInt(e.target.value), setItemDetails, setIsChanged)}
-                    style={{ width: "60px" }}
-                    inputProps={{ min: 0 }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    type="number"
-                    value={itemDetails[item.slug]?.price || 0}
-                    onChange={(e) => handleInputChange(item.slug, "price", parseFloat(e.target.value), setItemDetails, setIsChanged)}
-                    style={{ width: "100px" }}
-                    inputProps={{ min: 0 }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<DeleteIcon />}
-                    onClick={() => handleDelete(item.slug)}
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
+      {loading ? ( // Show loading spinner while data is being fetched
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          <Select value={selectedBrand} onChange={handleBrandChange} displayEmpty>
+            <MenuItem value=""><em>Select Brand</em></MenuItem>
+            {brands.map((brand, index) => (
+              <MenuItem key={index} value={brand}>{brand}</MenuItem>
             ))}
-          </TableBody>
-        </Table>
-        {isChanged && (
-            <Button
+          </Select>
+          <TextField
+            label="Search by Name"
+            value={searchText}
+            onChange={handleSearchChange}
+          />
+          <TableContainer component={Paper}>
+            <Table aria-label="current stock table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Device Name</TableCell>
+                  <TableCell>Brand</TableCell>
+                  <TableCell>Stock</TableCell>
+                  <TableCell>Price</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredItems.map((item) => (
+                  <TableRow key={item.slug}>
+                    <TableCell>{item.phone_name}</TableCell>
+                    <TableCell>{item.brand}</TableCell>
+                    <TableCell>
+                      <TextField
+                        type="number"
+                        value={itemDetails[item.slug]?.stock || 0}
+                        onChange={(e) => handleInputChange(item.slug, "stock", parseInt(e.target.value), setItemDetails, setIsChanged)}
+                        style={{ width: "60px" }}
+                        inputProps={{ min: 0 }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        type="number"
+                        value={itemDetails[item.slug]?.price || 0}
+                        onChange={(e) => handleInputChange(item.slug, "price", parseFloat(e.target.value), setItemDetails, setIsChanged)}
+                        style={{ width: "100px" }}
+                        inputProps={{ min: 0 }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        startIcon={<DeleteIcon />}
+                        onClick={() => handleDelete(item.slug)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            {isChanged && (
+              <Button
                 variant="contained"
                 color="primary"
                 startIcon={<SyncIcon />}
                 onClick={() => handleSync(items, itemDetails, initialItemDetails, setIsChanged)}
                 style={{ position: "fixed", bottom: "80px", right: "20px" }}
-            >
-              Sync
-            </Button>
-        )}
-      </TableContainer>
+              >
+                Sync
+              </Button>
+            )}
+          </TableContainer>
+        </>
+      )}
     </div>
   );
 }

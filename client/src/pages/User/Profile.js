@@ -1,7 +1,7 @@
 import Header from "../../components/layout/Header";
 import React, { useEffect, useState } from 'react';
 import ProfileCard from "../../components/profile/ProfileCard";
-import { Container } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from 'react-router-dom';
@@ -12,11 +12,13 @@ import Button from '@mui/material/Button';
 import BottomLongPages from '../../components/layout/BottomLongPages';
 import './Profile.css'
 import axiosInstance from "../../utils/axiosConfig";
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Profile() {
     const [userData, setUserData] = useState({});
     const [isAdmin, setIsAdmin] = useState(false);
     const [transactions, setTransactions] = useState([]);
+    const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -48,8 +50,14 @@ export default function Profile() {
             }
         };
 
-        fetchUserData();
-        fetchTransactions();
+        const fetchData = async () => {
+            setLoading(true);
+            await fetchUserData();
+            await fetchTransactions();
+            setLoading(false);
+        };
+
+        fetchData();
     }, []);
 
     const navigate = useNavigate();
@@ -67,56 +75,62 @@ export default function Profile() {
             <Header />
             <div className="profile-content">
                 <Container>
-                    <ProfileCard userData={userData} />
-                    {isAdmin && (
-                        <Container className="admin-panel">
-                            <Box sx={{ flexGrow: 3 }}>
-                                <Grid>
-                                    <h3><center>Admin Panel</center></h3>
-                                </Grid>
-                                <Grid container spacing={2} columns={24} className="admin-buttons">
-                                    <Grid xs={8}>
-                                        <Button href="admin/users">Users Management</Button>
-                                    </Grid>
-                                    <Grid container xs={16} columns={12}>
-                                        <Grid xs={4}>
-                                            <Button href="admin/add-item">Stock Management</Button>
+                    {loading ? (
+                        <div><center><CircularProgress size={300} /></center></div>
+                    ) : (
+                        <>
+                            <ProfileCard userData={userData} />
+                            {isAdmin && (
+                                <Container className="admin-panel">
+                                    <Box sx={{ flexGrow: 3 }}>
+                                        <Grid>
+                                            <h3><center>Admin Panel</center></h3>
                                         </Grid>
-                                        <Grid xs={4}>
-                                            <Button href="admin/analytics">Analytics</Button>
+                                        <Grid container spacing={2} columns={24} className="admin-buttons">
+                                            <Grid xs={8}>
+                                                <Button href="admin/users">Users Management</Button>
+                                            </Grid>
+                                            <Grid container xs={16} columns={12}>
+                                                <Grid xs={4}>
+                                                    <Button href="admin/add-item">Stock Management</Button>
+                                                </Grid>
+                                                <Grid xs={4}>
+                                                    <Button href="admin/analytics">Analytics</Button>
+                                                </Grid>
+                                                <Grid xs={4}>
+                                                    <Button href="admin/Transactions">Transactions</Button>
+                                                </Grid>
+                                            </Grid>
                                         </Grid>
-                                        <Grid xs={4}>
-                                            <Button href="admin/Transactions">Transactions</Button>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        </Container>
+                                    </Box>
+                                </Container>
+                            )}
+                            <Container className="admin-panel">
+                                <center><h2>Last Transactions</h2></center>
+                                <Stack spacing={5}>
+                                    <div className="trans">
+                                        {transactions.length === 0 ? (
+                                            <center><p>No transactions found.</p></center>
+                                        ) : (
+                                            transactions.map(transaction => (
+                                                <div
+                                                    key={transaction._id}
+                                                    className="trans-item"
+                                                    onClick={() => handleTransactionClick(transaction._id)}
+                                                    style={{ cursor: 'pointer', padding: '10px', border: '1px solid #ccc', borderRadius: '5px', marginBottom: '10px' }}
+                                                >
+                                                    <p><strong>Transaction ID:</strong> {transaction._id}</p>
+                                                    <p><strong>Total Quantity:</strong> {transaction.TotalQuantity} items</p>
+                                                    <p><strong>Total Price:</strong> ${transaction.TotalPrice.toFixed(2)}</p>
+                                                    <p><strong>Order Date:</strong> {new Date(transaction.OrderDate).toLocaleString()}</p>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </Stack>
+                            </Container>
+                        </>
                     )}
-                    <Container className="admin-panel">
-                        <center><h2>Last Transactions</h2></center>
-                        <Stack spacing={5}>
-                            <div className="trans">
-                                {transactions.length === 0 ? (
-                                    <center><p>No transactions found.</p></center>
-                                ) : (
-                                    transactions.map(transaction => (
-                                        <div
-                                            key={transaction._id}
-                                            className="trans-item"
-                                            onClick={() => handleTransactionClick(transaction._id)}
-                                            style={{ cursor: 'pointer', padding: '10px', border: '1px solid #ccc', borderRadius: '5px', marginBottom: '10px' }}
-                                        >
-                                            <p><strong>Transaction ID:</strong> {transaction._id}</p>
-                                            <p><strong>Total Quantity:</strong> {transaction.TotalQuantity} items</p>
-                                            <p><strong>Total Price:</strong> ${transaction.TotalPrice.toFixed(2)}</p>
-                                            <p><strong>Order Date:</strong> {new Date(transaction.OrderDate).toLocaleString()}</p>
-                                        </div>
-                                    ))
-                                )}
-                            </div>
-                        </Stack>
-                    </Container>
                 </Container>
             </div>
             <Fab color="primary" margin-left="100" aria-label="edit" onClick={handleEditClick}>
