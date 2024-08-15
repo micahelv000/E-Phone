@@ -25,7 +25,7 @@ export default function Home() {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const response = await axiosInstance.get('http://localhost:5000/items');
+                const response = await axiosInstance.get('/items');
                 setItems(response.data);
                 setFilteredItems(response.data);
 

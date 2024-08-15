@@ -17,7 +17,7 @@ const Analytics = () => {
     const fetchUserData = async () => {
       const token = localStorage.getItem('authToken');
       try {
-        const response = await axiosInstance.get('http://localhost:5000/users', {
+        const response = await axiosInstance.get('/users', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -31,7 +31,7 @@ const Analytics = () => {
     const fetchTransactionData = async () => {
       const token = localStorage.getItem('authToken');
       try {
-        const response = await axiosInstance.get('http://localhost:5000/admin-all-transactions', {
+        const response = await axiosInstance.get('/admin-all-transactions', {
           headers: {
             Authorization: `Bearer ${token}`
           }

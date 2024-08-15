@@ -6,7 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import Header from '../../components/layout/Header';
 import { Container } from 'react-bootstrap';
-import axios from 'axios';
+import axiosInstance from "../../utils/axiosConfig";
 import { useNavigate } from 'react-router-dom';
 import Bottom from '../../components/layout/Bottom';
 import { FaUser, FaCity, FaPhone, FaImage, FaLock } from 'react-icons/fa';
@@ -37,7 +37,7 @@ function EditUser() {
     } else {
       const fetchUserDetails = async () => {
         try {
-          const response = await axios.get('http://localhost:5000/user-details', {
+          const response = await axiosInstance.get('/user-details', {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
@@ -78,7 +78,7 @@ function EditUser() {
       }
 
       try {
-        const response = await axios.put('http://localhost:5000/update-user', userData, {
+        const response = await axiosInstance.put('/update-user', userData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`,
             'Content-Type': 'multipart/form-data'
@@ -110,7 +110,7 @@ function EditUser() {
       };
 
       try {
-        const response = await axios.put('http://localhost:5000/update-password', userData, {
+        const response = await axiosInstance.put('/update-password', userData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
           }

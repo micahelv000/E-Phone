@@ -24,7 +24,7 @@ export default function Profile() {
         const fetchUserData = async () => {
             const token = localStorage.getItem('authToken');
             try {
-                const response = await axiosInstance.get('http://localhost:5000/user-details', {
+                const response = await axiosInstance.get('/user-details', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -39,7 +39,7 @@ export default function Profile() {
         const fetchTransactions = async () => {
             const token = localStorage.getItem('authToken');
             try {
-                const response = await axiosInstance.get('http://localhost:5000/all-transactions', {
+                const response = await axiosInstance.get('/all-transactions', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

@@ -15,7 +15,7 @@ export default function TransactionDetails() {
     // Function to fetch item image from phone-specs API
     const fetchItemImage = async (slug) => {
         try {
-            const response = await fetch(`http://phone-specs-api.vercel.app/${slug}`);
+            const response = await fetch(`https://phone-specs-api.vercel.app/${slug}`);
             const data = await response.json();
             if (data.status) {
                 return {
@@ -34,7 +34,7 @@ export default function TransactionDetails() {
     useEffect(() => {
         const fetchTransaction = async () => {
             try {
-                const response = await axiosInstance.get(`http://localhost:5000/transaction/${id}`);
+                const response = await axiosInstance.get(`/transaction/${id}`);
                 const transactionData = response.data;
 
                 // Fetch images for each item

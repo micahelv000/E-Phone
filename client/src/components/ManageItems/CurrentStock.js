@@ -19,7 +19,7 @@ function CurrentStock() {
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
-      const data = await fetchData("http://localhost:5000/items");
+      const data = await fetchData("/items");
       if (data) {
         setItems(data);
         setFilteredItems(data);
@@ -59,7 +59,7 @@ function CurrentStock() {
 
   const handleDelete = async (slug) => {
     try {
-      await axiosInstance.delete(`http://localhost:5000/delete-item/${slug}`);
+      await axiosInstance.delete(`/delete-item/${slug}`);
       setItems(items.filter(item => item.slug !== slug));
       setFilteredItems(filteredItems.filter(item => item.slug !== slug));
     } catch (error) {

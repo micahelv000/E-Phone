@@ -35,7 +35,7 @@ function RowComponent(props) {
 
   useEffect(() => {
     devices.forEach(async (device) => {
-      const data = await fetchData(`http://localhost:5000/item-details/${device.slug}`);
+      const data = await fetchData(`/item-details/${device.slug}`);
       if (data) {
         setItemDetails((prevState) => ({
           ...prevState,

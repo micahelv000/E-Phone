@@ -55,7 +55,7 @@ export const handleSync = async (items, itemDetails, initialItemDetails, setIsCh
         phone_name: data.phone_name,
       };
 
-      const updateResponse = await axiosInstance.put(`http://localhost:5000/update-item/${slug}`, updatedDetails);
+      const updateResponse = await axiosInstance.put(`/update-item/${slug}`, updatedDetails);
       console.log("Item updated:", updateResponse.data);
     } catch (error) {
       console.error("Error updating item:", error);

@@ -6,7 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import Header from '../../components/layout/Header';
 import { Container } from 'react-bootstrap';
-import axios from 'axios';
+import axiosInstance from "../../utils/axiosConfig";
 import { useNavigate } from 'react-router-dom';
 import Bottom from '../../components/layout/Bottom';
 import './Register.css';  // Assuming your CSS file is named Register.css
@@ -32,7 +32,7 @@ function Register() {
       };
 
       try {
-        const response = await axios.post('http://localhost:5000/register', userData);
+        const response = await axiosInstance.post('register', userData);
         console.log(response.data);
         localStorage.setItem('authToken', response.data.token);
         navigate('/');

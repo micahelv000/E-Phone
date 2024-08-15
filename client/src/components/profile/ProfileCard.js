@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ProfileCard.css';
-import axios from 'axios';
+import axiosInstance from "../../utils/axiosConfig";
 
 export default function ProfileCard({ userData }) {
     const [profilePictureUrl, setProfilePictureUrl] = useState(null);
@@ -9,9 +9,10 @@ export default function ProfileCard({ userData }) {
 
     useEffect(() => {
         if (userData._id) {
-            axios.get(`http://localhost:5000/user-profile-picture/${userData._id}?cb=${new Date().getTime()}`)
+            axiosInstance.get(`/user-profile-picture/${userData._id}?cb=${new Date().getTime()}`)
                 .then(response => {
-                    setProfilePictureUrl(response.config.url);
+                    const fullUrl = `${axiosInstance.defaults.baseURL}${response.config.url}`;
+                    setProfilePictureUrl(fullUrl);
                 })
                 .catch(() => {
                     setProfilePictureUrl(null);

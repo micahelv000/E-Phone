@@ -63,7 +63,7 @@ export default function Cart() {
     try {
       // Check stock for each item
       const stockCheckPromises = sanitizedCart.map(item =>
-        axiosInstance.get(`http://localhost:5000/check-stock/${item.ItemSlug}`, {
+        axiosInstance.get(`/check-stock/${item.ItemSlug}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -81,7 +81,7 @@ export default function Cart() {
       }
   
       // First create the transaction
-      const response = await axiosInstance.post('http://localhost:5000/create-transaction', transaction, {
+      const response = await axiosInstance.post('/create-transaction', transaction, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -89,7 +89,7 @@ export default function Cart() {
   
       // Then update the stock for each item
       await Promise.all(sanitizedCart.map(item =>
-        axiosInstance.put(`http://localhost:5000/update-stock/${item.ItemSlug}`, {
+        axiosInstance.put(`/update-stock/${item.ItemSlug}`, {
           quantity: item.Quantity
         }, {
           headers: {

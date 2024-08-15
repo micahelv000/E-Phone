@@ -23,7 +23,7 @@ export default function Transactions() {
 
     const handleDelete = async (id) => {
       try {
-        await axiosInstance.delete(`http://localhost:5000/delete-transaction/${id}`, {
+        await axiosInstance.delete(`/delete-transaction/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
           }
@@ -36,7 +36,7 @@ export default function Transactions() {
 
     const handleUpdateTransaction = async (transaction) => {
       try {
-        await axiosInstance.put(`http://localhost:5000/transaction/${transaction.id}`, transaction, {
+        await axiosInstance.put(`/transaction/${transaction.id}`, transaction, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
           }
@@ -55,7 +55,7 @@ export default function Transactions() {
 
     const handleViewDetails = async (id) => {
       try {
-        const response = await axiosInstance.get(`http://localhost:5000/transaction/${id}`, {
+        const response = await axiosInstance.get(`/transaction/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
           }
@@ -105,12 +105,12 @@ export default function Transactions() {
       const fetchData = async () => {
         try {
           const [transactionsResponse, usersResponse] = await Promise.all([
-            axiosInstance.get('http://localhost:5000/admin-all-transactions', {
+            axiosInstance.get('/admin-all-transactions', {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
               }
             }),
-            axiosInstance.get('http://localhost:5000/users', {
+            axiosInstance.get('/users', {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
               }

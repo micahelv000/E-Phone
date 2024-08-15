@@ -7,7 +7,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { Button, Container } from 'react-bootstrap';
 import CircularProgress from '@mui/material/CircularProgress';
 import BottomLongPages from '../../components/layout/BottomLongPages';
-import axios from 'axios';
+import axiosInstance from "../../utils/axiosConfig";
 
 export default function ItemPage() {
   const location = useLocation();
@@ -64,7 +64,7 @@ export default function ItemPage() {
   }, [slug]);
 
   const fetchYouTubeVideo = (phoneName) => {
-    axios.get(`http://localhost:5000/youtube-video?phoneName=${phoneName}`)
+    axiosInstance.get(`/youtube-video?phoneName=${phoneName}`)
         .then(response => {
           setVideoUrl(response.data.videoUrl);
         })

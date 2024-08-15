@@ -15,7 +15,7 @@ export default function Users() {
 
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`http://localhost:5000/users/${id}`, {
+      await axiosInstance.delete(`/users/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }
@@ -28,7 +28,7 @@ export default function Users() {
 
   const handleUpdateUser = async (user) => {
     try {
-      await axiosInstance.put(`http://localhost:5000/users/${user.id}`, user, {
+      await axiosInstance.put(`/users/${user.id}`, user, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }
@@ -47,7 +47,7 @@ export default function Users() {
 
   const handleForceLogout = async (id) => {
     try {
-      await axiosInstance.post(`http://localhost:5000/users/${id}/force-logout`, {}, {
+      await axiosInstance.post(`/users/${id}/force-logout`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`
         }
@@ -139,7 +139,7 @@ export default function Users() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axiosInstance.get('http://localhost:5000/users', {
+        const response = await axiosInstance.get('/users', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`
           }

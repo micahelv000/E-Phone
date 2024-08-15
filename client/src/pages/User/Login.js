@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Header from '../../components/layout/Header';
 import { Container, Card, Button } from 'react-bootstrap';
-import axios from 'axios';
+import axiosInstance from '../../utils/axiosConfig';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Bottom from '../../components/layout/Bottom';
@@ -20,7 +20,7 @@ function Login() {
     const password = event.target.formBasicPassword.value;
 
     try {
-      const response = await axios.post('http://localhost:5000/login', { username, password });
+      const response = await axiosInstance.post('/login', { username, password });
       console.log(response.data);
       localStorage.setItem('authToken', response.data.token);
       navigate('/');
