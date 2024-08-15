@@ -6,6 +6,8 @@ const axios = require('axios');
 require('form-data');
 const path = require('path');
 
+const NEXTCLOUD_API_KEY = process.env.NEXTCLOUD_API_KEY;
+
 exports.register = async (req, res) => {
   const { username, password, firstName, lastName, city, phoneNumber, isAdmin } = req.body;
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -82,7 +84,7 @@ exports.updateUser = async (req, res) => {
         data: req.file.buffer,
         headers: {
           'Content-Type': req.file.mimetype,
-          'Authorization': `Basic ${Buffer.from('deftera:***REMOVED***').toString('base64')}`
+          'Authorization': `Basic ${Buffer.from(`deftera:${NEXTCLOUD_API_KEY}`).toString('base64')}`
         }
       });
 
@@ -208,7 +210,7 @@ exports.getUserProfilePicture = async (req, res) => {
       url: user.profilePictureUrl,
       responseType: 'arraybuffer',
       headers: {
-        'Authorization': `Basic ${Buffer.from('deftera:***REMOVED***').toString('base64')}`
+        'Authorization': `Basic ${Buffer.from(`deftera:${NEXTCLOUD_API_KEY}`).toString('base64')}`
       }
     });
 
