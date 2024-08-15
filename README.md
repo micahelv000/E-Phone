@@ -73,6 +73,7 @@ Both methods will start the server and client applications. The server will run 
 
 ## License
 [E-Phone](https://github.com/micahelv000/E-Phone) by Liav Mordouch and Michael Volobuev is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1)
+
 ---
 
 Thank you for using E-Phone! We hope you enjoy the experience. If you have any questions or need assistance, please feel free to contact us.
