@@ -1,20 +1,29 @@
-#This is an example webapp.io configuration for React!
+# Use Ubuntu 18.04 as the base image
 FROM vm/ubuntu:18.04
 
-# To note: Layerfiles create entire VMs, *not* containers!
+# Set the Node.js version to be installed
+ENV NODE_VERSION=14
 
-RUN curl -fSsL https://deb.nodesource.com/setup_12.x | bash && \
-    apt-get install nodejs python3 make gcc build-essential && \
+# Install Node.js and other dependencies
+RUN curl -fSsL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash && \
+    apt-get install -y nodejs python3 make gcc build-essential && \
     rm -f /etc/apt/sources.list.d/nodesource.list
 
-# node is a memory hog
+# Set the memory limit for Node.js
 MEMORY 2G
-ENV NODE_OPTIONS=--max-old-space-size=8192
+ENV NODE_OPTIONS=--max-old-space-size=2048
 
+# Copy the entire project into the VM
 COPY . .
-RUN npm install || true
+
+# Install Node.js dependencies
+RUN npm install
+
+# Run the application in the background
 RUN BACKGROUND npm start || python3 -m http.server 3000
 
-# Create a unique link to share the app in this runner.
-# Every time someone clicks the link, we'll wake up this staging server.
+# Expose the web application on port 3000
 EXPOSE WEBSITE http://localhost:3000
+
+# Concurrently run the client and server
+RUN npx concurrently "npm start --workspace=client" "npm start --workspace=server"
