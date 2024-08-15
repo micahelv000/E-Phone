@@ -1,41 +1,28 @@
 # E-Phone
-![Ephone f41779cdf446f6886d0a](https://github.com/user-attachments/assets/fc2eb840-5813-4627-a846-97979cae9e14)
+![logo](https://github.com/user-attachments/assets/fc2eb840-5813-4627-a846-97979cae9e14)
 
 E-Phone is a smart e-commerce website dedicated to buying and selling phones. It offers a seamless and efficient platform for both customers and administrators. The platform integrates with external APIs to fetch the latest phones, ensuring that users have access to the newest models on the market.
 
-## Features
-
-### User Features
-- **Browse Phones**: Users can explore a wide range of phones, all fetched from an external API to ensure the latest models are available.
-- **Purchase Phones**: A smooth and secure checkout process allows users to purchase their desired phones.
-- **Transaction History**: Users can view their previous transactions and keep track of their purchases.
-
-### Admin Features
-- **Smart Admin Panel**: The admin panel is designed to provide administrators with full control over the website.
-- **Manage Phones**: Admins can add new phones, update existing phone details, and change prices as needed.
-- **Analytics Dashboard**: View comprehensive analytics about website performance, user activities, and sales.
-- **User Management**: Admins can view, edit, and manage user details and transaction records.
-- **Transaction Management**: Admins have the ability to oversee and modify transaction details when necessary.
-
 ## Technology Stack
 
-- **Frontend**: Built with modern web technologies for a responsive and user-friendly interface.
-- **Backend**: Robust backend system handling all business logic and integrations with external APIs.
-- **Database**: Secure and efficient database management for storing user and transaction information.
-- **APIs**: Integration with external APIs to fetch the latest phone models and their details.
+| Component         | Technology                                                                                                                  |
+|-------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| **Frontend**      | React with [create-react-app](https://github.com/facebook/create-react-app)                                                 |
+| **Backend**       | [Express](https://github.com/expressjs/express)                                                                             |
+| **Database**      | MongoDB                                                                                                                     |
+| **External APIs** | [Phone Specs API](https://github.com/azharimm/phone-specs-api) <br>[YouTube API](https://developers.google.com/youtube/v3)  |
+| **File Storage**  | [Nextcloud WebDAV](https://docs.nextcloud.com/server/20/user_manual/en/files/access_webdav.html#accessing-files-using-curl) |
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js
-- NPM (Node Package Manager)
-- MongoDB (or any other database system of choice)
+- [Node.js & npm](https://nodejs.org/en/download/package-manager)
 
 ### Installation
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/e-phone.git
+   git clone https://github.com/micahelv000/E-Phone.git
    cd e-phone
    ```
 
@@ -45,41 +32,47 @@ E-Phone is a smart e-commerce website dedicated to buying and selling phones. It
    ```
 
 3. **Set Up Environment Variables**
-   Create a `.env` file in the root directory and add your environment variables:
-   ```plaintext
-   DATABASE_URL=mongodb://localhost:27017/e-phone
-   API_KEY=your_api_key
-   ```
+   Edit the `.env` file in the server directory and add your environment variables.
 
-4. **Run the Application**
+### Running the Application
+
+#### Running in Development Mode with npm
    ```bash
    npm start
    ```
-   Runs both the client and server concurrently. The client is served on http://localhost:3000 and the server on http://localhost:5000.
 
+#### Running in Production Mode with pm2
+1. **Install pm2 Globally**
+   ```bash
+   npm install pm2 -g
+   ```
+2. **Start The Application**
+   ```bash
+   pm2 start ecosystem.config.js
+   ```
+   
+Both methods will start the server and client applications. The server will run on port 5000, and the client will run on port 3000.
 
+## Features and Usage
 
-5. **Access the Website**
-   Open your browser and navigate to `http://localhost:3000` to view the E-Phone website.
-
-## Usage
-
-### User Operations
+### User Features
 - **Sign Up/Login**: Create an account or log in to access personalized features.
-- **Browse and Buy**: Explore the catalog and purchase phones.
-- **View Transactions**: Check your past transactions and order details.
+- **Browse Phones**: Explore a wide range of phones, all fetched from an external API to ensure the latest models are available.
+- **Purchase Phones**: A smooth and secure checkout process allows users to purchase their desired phones.
+- **Transaction History**: View previous transactions and keep track of purchases.
+- **Profile Management**: Edit personal details, password, and profile picture. View profile information.
+- **Cart Management**: Add or remove items from the cart.
+- **Phone Details**: View detailed information about a specific phone, including specifications and related videos.
 
-### Admin Operations
-- **Login**: Access the admin panel with your credentials.
-- **Manage Phones**: Add, update, or reprice phones as needed.
-- **View Analytics**: Monitor website performance and user activities.
-- **Manage Users and Transactions**: Oversee and modify user and transaction details when necessary.
-
+### Admin Features
+- **Login**: Access the admin panel with credentials.
+- **Manage Phones**: Add new phones, update existing phone details, and change prices.
+- **Analytics Dashboard**: View comprehensive analytics about website performance, user activities, and sales.
+- **User Management**: View, edit, and manage user details and transaction records.
+- **Transaction Management**: Oversee and modify transaction details when necessary.
 
 ## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
+[E-Phone](https://github.com/micahelv000/E-Phone) by Liav Mordouch and Michael Volobuev is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1)
 ---
 
 Thank you for using E-Phone! We hope you enjoy the experience. If you have any questions or need assistance, please feel free to contact us.
