@@ -1,5 +1,6 @@
 # E-Phone
-![logo](https://github.com/user-attachments/assets/fc2eb840-5813-4627-a846-97979cae9e14)
+
+![logo](./client/public/Ephone.png)
 
 E-Phone is a smart e-commerce website dedicated to buying and selling phones. It offers a seamless and efficient platform for both customers and administrators. The platform integrates with external APIs to fetch the latest phones, ensuring that users have access to the newest models on the market.
 
@@ -16,17 +17,20 @@ E-Phone is a smart e-commerce website dedicated to buying and selling phones. It
 ## Getting Started
 
 ### Prerequisites
+
 - [Node.js & npm](https://nodejs.org/en/download/package-manager)
 
 ### Installation
 
 1. **Clone the Repository**
+
    ```bash
    git clone https://github.com/micahelv000/E-Phone.git
    cd e-phone
    ```
 
 2. **Install Dependencies**
+
    ```bash
    npm install
    ```
@@ -37,11 +41,13 @@ E-Phone is a smart e-commerce website dedicated to buying and selling phones. It
 ### Running the Application
 
 #### Running in Development Mode with npm
-   ```bash
-   npm start
-   ```
+
+```bash
+npm start
+```
 
 #### Running in Production Mode with pm2
+
 1. **Install pm2 Globally**
    ```bash
    npm install pm2 -g
@@ -50,12 +56,13 @@ E-Phone is a smart e-commerce website dedicated to buying and selling phones. It
    ```bash
    pm2 start ecosystem.config.js
    ```
-   
+
 Both methods will start the server and client applications. The server will run on port 5000, and the client will run on port 3000.
 
 ## Features and Usage
 
 ### User Features
+
 - **Sign Up/Login**: Create an account or log in to access personalized features.
 - **Browse Phones**: Explore a wide range of phones, all fetched from an external API to ensure the latest models are available.
 - **Purchase Phones**: A smooth and secure checkout process allows users to purchase their desired phones.
@@ -65,6 +72,7 @@ Both methods will start the server and client applications. The server will run 
 - **Phone Details**: View detailed information about a specific phone, including specifications and related videos.
 
 ### Admin Features
+
 - **Login**: Access the admin panel with credentials.
 - **Manage Phones**: Add new phones, update existing phone details, and change prices.
 - **Analytics Dashboard**: View comprehensive analytics about website performance, user activities, and sales.
@@ -72,6 +80,7 @@ Both methods will start the server and client applications. The server will run 
 - **Transaction Management**: Oversee and modify transaction details when necessary.
 
 ## License
+
 [E-Phone](https://github.com/micahelv000/E-Phone) by Liav Mordouch and Michael Volobuev is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1)
 
 ---

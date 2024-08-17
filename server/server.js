@@ -7,12 +7,10 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const itemRoutes = require("./routes/itemRoutes");
 const transactionsRoutes = require("./routes/TransactionRoutes");
-const videoRoutes = require('./routes/videoRoutes');
+const videoRoutes = require("./routes/videoRoutes");
 
 const app = express();
 const port = 5000;
-
-connectDB();
 
 app.use(express.json());
 app.use(cors());
@@ -22,6 +20,12 @@ app.use("/", itemRoutes);
 app.use("/", transactionsRoutes);
 app.use("/", videoRoutes);
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+connectDB()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Failed to connect to the database", err);
+  });
