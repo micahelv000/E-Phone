@@ -79,6 +79,15 @@ Both methods will start the server and client applications. The server will run 
 - **User Management**: View, edit, and manage user details and transaction records.
 - **Transaction Management**: Oversee and modify transaction details when necessary.
 
+### Screenshots 
+![image](https://github.com/user-attachments/assets/e4346ef5-b43b-4b31-98a9-7a5ff48b0948)
+![image](https://github.com/user-attachments/assets/c0685f40-d88f-4ee9-9968-dcc441bf5a80)
+![image](https://github.com/user-attachments/assets/422db64a-353d-4d6b-a960-fcbfc936e3b0)
+![image](https://github.com/user-attachments/assets/a93c79b9-8311-4f7f-af83-0660292e2094)
+![image](https://github.com/user-attachments/assets/3013571d-c99f-4147-a8bb-740b7987fc2f)
+![image](https://github.com/user-attachments/assets/3e306339-5eb5-4f52-a536-e35191f7334d)
+
+
 ## License
 
 [E-Phone](https://github.com/micahelv000/E-Phone) by Liav Mordouch and Michael Volobuev is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1)
